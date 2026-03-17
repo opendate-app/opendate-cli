@@ -1,0 +1,34 @@
+{
+  "name": "@opendate/cli",
+  "version": "0.1.0",
+  "description": "Opendate CLI - manage your Opendate account from the command line",
+  "type": "module",
+  "bin": {
+    "opdt": "./dist/bin/opdt.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx bin/opdt.ts",
+    "test": "vitest",
+    "lint": "eslint src/"
+  },
+  "keywords": ["opendate", "cli", "events", "ticketing"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "axios": "^1.7.0",
+    "chalk": "^5.3.0",
+    "cli-table3": "^0.6.5",
+    "commander": "^12.1.0",
+    "inquirer": "^9.3.0",
+    "ora": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}
