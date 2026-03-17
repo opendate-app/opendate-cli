@@ -1,0 +1,33 @@
+import type { Command } from "commander";
+import chalk from "chalk";
+import { createUnauthenticatedClient } from "../client.js";
+import { saveConfig } from "../config.js";
+import { withErrorHandling } from "../errors.js";
+import { promptCredentials } from "../utils/prompt.js";
+
+export function registerLoginCommand(program: Command): void {
+  program
+    .command("login")
+    .description("Authenticate with Opendate")
+    .action(
+      withErrorHandling(async (_opts, cmd) => {
+        const globalOpts = cmd.optsWithGlobals();
+        const { email, password } = await promptCredentials();
+
+        const client = createUnauthenticatedClient(globalOpts.baseUrl);
+        const data = await client.post("/oauth/token", {
+          grant_type: "password",
+          email,
+          password,
+        });
+
+        saveConfig({
+          accessToken: data.access_token,
+          refreshToken: data.refresh_token,
+          tokenExpiresAt: Date.now() + data.expires_in * 1000,
+        });
+
+        console.log(chalk.green(`Logged in as ${email}`));
+      }),
+    );
+}
