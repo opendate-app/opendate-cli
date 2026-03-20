@@ -44,8 +44,8 @@ function buildFieldHelpText(res: ResourceDef): string {
   }
 
   lines.push("");
-  lines.push('Run "opdt docs --predicates" for the full list of filter predicates (_eq, _cont, _gt, etc.).');
-  lines.push(`Run "opdt docs ${res.name.toLowerCase()}" for detailed examples.`);
+  lines.push('Run "opendate docs --predicates" for the full list of filter predicates (_eq, _cont, _gt, etc.).');
+  lines.push(`Run "opendate docs ${res.name.toLowerCase()}" for detailed examples.`);
 
   return lines.join("\n");
 }

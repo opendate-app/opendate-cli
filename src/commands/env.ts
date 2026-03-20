@@ -50,7 +50,7 @@ export function registerEnvCommands(program: Command): void {
         console.log(
           chalk.green(`Switched to ${env} (${ENVIRONMENT_URLS[env]})`),
         );
-        console.log(chalk.yellow("Auth tokens cleared — run `opdt login` to authenticate."));
+        console.log(chalk.yellow("Auth tokens cleared — run `opendate login` to authenticate."));
       }),
     );
 }

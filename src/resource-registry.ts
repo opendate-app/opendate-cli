@@ -20,7 +20,7 @@ export interface ResourceDef {
 export const RESOURCES: ResourceDef[] = [
   {
     name: "Events",
-    command: "opdt events list",
+    command: "opendate events list",
     description: "Calendar events / confirms",
     fields: [
       { name: "title", type: "string", description: "Event title" },
@@ -61,7 +61,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Artists",
-    command: "opdt artists list",
+    command: "opendate artists list",
     description: "Artist records",
     fields: [
       { name: "name", type: "string", description: "Artist name" },
@@ -93,7 +93,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Venues",
-    command: "opdt venues list",
+    command: "opendate venues list",
     description: "Venue ownerships",
     fields: [
       { name: "nickname", type: "string", description: "Venue display name" },
@@ -109,7 +109,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Rooms",
-    command: "opdt rooms list",
+    command: "opendate rooms list",
     description: "Venue rooms/stages",
     fields: [
       { name: "name", type: "string", description: "Room name" },
@@ -125,7 +125,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Tickets",
-    command: "opdt tickets list --event <id>",
+    command: "opendate tickets list --event <id>",
     description: "Event tickets",
     fields: [
       { name: "first_name", type: "string", description: "Attendee first name" },
@@ -166,7 +166,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Ticket Types",
-    command: "opdt ticket-types list --event <id>",
+    command: "opendate ticket-types list --event <id>",
     description: "Ticket type definitions",
     fields: [
       { name: "name", type: "string", description: "Ticket type name" },
@@ -198,7 +198,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Orders",
-    command: "opdt orders list --event <id>",
+    command: "opendate orders list --event <id>",
     description: "Ticket orders",
     fields: [
       { name: "first_name", type: "string", description: "Buyer first name" },
@@ -233,7 +233,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Add-Ons",
-    command: "opdt add-ons list --event <id>",
+    command: "opendate add-ons list --event <id>",
     description: "Event add-ons",
     fields: [
       { name: "name", type: "string", description: "Add-on name" },
@@ -253,7 +253,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Promo Codes",
-    command: "opdt promo-codes list --event <id>",
+    command: "opendate promo-codes list --event <id>",
     description: "Event promo codes",
     fields: [
       { name: "name", type: "string", description: "Promo code name" },
@@ -274,7 +274,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Custom Charges",
-    command: "opdt custom-charges list --event <id>",
+    command: "opendate custom-charges list --event <id>",
     description: "Custom charge types",
     fields: [
       { name: "name", type: "string", description: "Charge name" },
@@ -291,7 +291,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Fans",
-    command: "opdt fans list",
+    command: "opendate fans list",
     description: "Fan profiles",
     fields: [
       { name: "first_name", type: "string", description: "First name" },
@@ -321,7 +321,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Memberships",
-    command: "opdt memberships list",
+    command: "opendate memberships list",
     description: "Fan memberships",
     fields: [
       { name: "first_name", type: "string", description: "First name" },
@@ -345,7 +345,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Finance Items",
-    command: "opdt finance-items list --event <id>",
+    command: "opendate finance-items list --event <id>",
     description: "Financial line items",
     fields: [
       { name: "activity", type: "string", description: "Activity description" },
@@ -365,7 +365,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Finance Categories",
-    command: "opdt finance-categories list",
+    command: "opendate finance-categories list",
     description: "Finance category definitions",
     fields: [
       { name: "name", type: "string", description: "Category name" },
@@ -376,7 +376,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Refunds",
-    command: "opdt refunds list --event <id>",
+    command: "opendate refunds list --event <id>",
     description: "Order refunds",
     fields: [
       { name: "reason", type: "string", description: "Refund reason" },
@@ -394,7 +394,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Fee Rules",
-    command: "opdt fee-rules list",
+    command: "opendate fee-rules list",
     description: "Fee rule definitions",
     fields: [
       { name: "minimum", type: "decimal", description: "Minimum ticket price" },
@@ -411,7 +411,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Offers",
-    command: "opdt offers list",
+    command: "opendate offers list",
     description: "Artist offers/deals",
     fields: [
       { name: "event_name", type: "string", description: "Event name" },
@@ -437,7 +437,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Tags",
-    command: "opdt tags list",
+    command: "opendate tags list",
     description: "Tags (use --scope to filter: Artist, Fan, Offer, CalendarEvent, Note, Deal)",
     fields: [
       { name: "name", type: "string", description: "Tag name" },
@@ -448,7 +448,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Tagged Items",
-    command: "opdt tagged-items list",
+    command: "opendate tagged-items list",
     description: "Tag-to-resource associations (use --taggable-id and --taggable-type)",
     fields: [
       { name: "tag_id", type: "integer", description: "Tag ID" },
@@ -460,7 +460,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Notes",
-    command: "opdt notes list",
+    command: "opendate notes list",
     description: "Notes",
     fields: [
       { name: "title", type: "string", description: "Note title" },
@@ -474,7 +474,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Calendar Contacts",
-    command: "opdt calendar-contacts list",
+    command: "opendate calendar-contacts list",
     description: "Event contact associations",
     fields: [
       { name: "calendar_event_id", type: "integer", description: "Event ID" },
@@ -486,7 +486,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Food & Beverage",
-    command: "opdt food-and-beverage list",
+    command: "opendate food-and-beverage list",
     description: "Food and beverage items",
     fields: [
       { name: "menu_display_name", type: "string", description: "Menu item name" },
@@ -506,7 +506,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Manual Ticket Counts",
-    command: "opdt manual-ticket-counts list",
+    command: "opendate manual-ticket-counts list",
     description: "Manual ticket count entries",
     fields: [
       { name: "name", type: "string", description: "Count name" },
@@ -521,7 +521,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Show Activities",
-    command: "opdt show-activities list --event <id>",
+    command: "opendate show-activities list --event <id>",
     description: "Show activity timeline entries",
     fields: [
       { name: "name", type: "string", description: "Activity name" },
@@ -536,7 +536,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Ticket Reservations",
-    command: "opdt ticket-reservations list --event <id>",
+    command: "opendate ticket-reservations list --event <id>",
     description: "Ticket reservations",
     fields: [
       { name: "first_name", type: "string", description: "First name" },
@@ -556,7 +556,7 @@ export const RESOURCES: ResourceDef[] = [
   },
   {
     name: "Inbound Submissions",
-    command: "opdt inbound-submissions create --app-id <id>",
+    command: "opendate inbound-submissions create --app-id <id>",
     description: "Artist inbound submissions",
     fields: [
       { name: "artist_name", type: "string", description: "Artist name" },

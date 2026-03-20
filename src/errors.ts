@@ -15,7 +15,7 @@ export function withErrorHandling(
         if (status === 401) {
           console.error(
             chalk.red(
-              "Authentication failed. Run `opdt login` to authenticate.",
+              "Authentication failed. Run `opendate login` to authenticate.",
             ),
           );
         } else if (status === 404) {
