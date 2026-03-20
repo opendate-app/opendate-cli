@@ -23,6 +23,7 @@ export function registerTicketTypesCommands(program: Command): void {
       ),
       TICKET_TYPE_FILTERS,
     ),
+    "Ticket Types",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

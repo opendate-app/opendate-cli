@@ -22,6 +22,7 @@ export function registerFoodAndBeverageCommands(program: Command): void {
       ),
       FNB_FILTERS,
     ),
+    "Food & Beverage",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

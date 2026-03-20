@@ -20,6 +20,7 @@ export function registerVenuesCommands(program: Command): void {
       ),
       VENUE_FILTERS,
     ),
+    "Venues",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

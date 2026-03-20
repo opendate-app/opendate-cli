@@ -35,6 +35,7 @@ import { registerFoodAndBeverageCommands } from "./commands/food-and-beverage.js
 import { registerManualTicketCountsCommands } from "./commands/manual-ticket-counts.js";
 import { registerShowActivitiesCommands } from "./commands/show-activities.js";
 import { registerInboundSubmissionsCommands } from "./commands/inbound-submissions.js";
+import { registerDocsCommands } from "./commands/docs.js";
 
 export function createProgram(): Command {
   const program = new Command();
@@ -46,6 +47,9 @@ export function createProgram(): Command {
     .option("--json", "Output in JSON format")
     .option("--verbose", "Enable verbose output")
     .option("--base-url <url>", "Override API base URL");
+
+  // Docs & reference
+  registerDocsCommands(program);
 
   // Environment
   registerEnvCommands(program);

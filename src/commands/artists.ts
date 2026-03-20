@@ -20,6 +20,7 @@ export function registerArtistsCommands(program: Command): void {
       ),
       ARTIST_FILTERS,
     ),
+    "Artists",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

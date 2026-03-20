@@ -20,6 +20,7 @@ export function registerRefundsCommands(program: Command): void {
       ),
       [],
     ),
+    "Refunds",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

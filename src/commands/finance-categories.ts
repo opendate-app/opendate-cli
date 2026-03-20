@@ -22,6 +22,7 @@ export function registerFinanceCategoriesCommands(program: Command): void {
       ),
       FINANCE_CATEGORY_FILTERS,
     ),
+    "Finance Categories",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

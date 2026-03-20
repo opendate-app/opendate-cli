@@ -25,6 +25,7 @@ export function registerEventsCommands(program: Command): void {
       ),
       EVENT_FILTERS,
     ),
+    "Events",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

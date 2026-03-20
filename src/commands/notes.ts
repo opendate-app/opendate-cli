@@ -17,6 +17,7 @@ export function registerNotesCommands(program: Command): void {
       ),
       [],
     ),
+    "Notes",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

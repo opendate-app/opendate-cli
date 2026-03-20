@@ -17,6 +17,7 @@ export function registerCalendarContactsCommands(program: Command): void {
       ),
       [],
     ),
+    "Calendar Contacts",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
