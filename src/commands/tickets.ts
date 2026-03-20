@@ -4,31 +4,37 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+
+const TICKET_FILTERS: FilterDef[] = [
+  { flag: "--search <query>", description: "Search by name or email", paramKey: "search" },
+  { flag: "--ticket-type-id <id>", description: "Filter by ticket type ID", ransackKey: "ticket_type_id_eq" },
+  { flag: "--include-unpaid", description: "Include unpaid tickets", paramKey: "include_unpaid", isBoolean: true },
+  { flag: "--include-abstract", description: "Include abstract tickets", paramKey: "include_abstract", isBoolean: true },
+];
 
 export function registerTicketsCommands(program: Command): void {
   const tickets = program.command("tickets").description("Manage tickets");
 
-  addPaginationOptions(
-    tickets
-      .command("list")
-      .description("List tickets for an event")
-      .requiredOption("--event <id>", "Event ID")
-      .option("--search <query>", "Search tickets")
-      .option("--ticket-type-id <id>", "Filter by ticket type ID")
-      .option("--include-unpaid", "Include unpaid tickets")
-      .option("--sort <sort>", "Sort order"),
+  addSortOption(
+    addFilterOptions(
+      addPaginationOptions(
+        tickets
+          .command("list")
+          .description("List tickets for an event")
+          .requiredOption("--event <id>", "Event ID"),
+      ),
+      TICKET_FILTERS,
+    ),
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params: Record<string, any> = {
+      const data = await client.get(`/api/v2/confirms/${opts.event}/tickets`, {
         ...paginationParams(opts),
-      };
-      if (opts.search) params.search = opts.search;
-      if (opts.ticketTypeId) params.ticket_type_id = opts.ticketTypeId;
-      if (opts.includeUnpaid) params.include_unpaid = true;
-      if (opts.sort) params.sort = opts.sort;
-      const data = await client.get(`/api/v2/confirms/${opts.event}/tickets`, params);
+        ...filterParams(opts, TICKET_FILTERS),
+        ...sortParams(opts),
+      });
       output(data, globalOpts);
     }),
   );

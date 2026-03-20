@@ -3,28 +3,33 @@ import { createClient } from "../client.js";
 import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addFilterOptions, filterParams } from "../filters.js";
 
 export function registerTaggedItemsCommands(program: Command): void {
   const group = program
     .command("tagged-items")
     .description("Manage tagged items");
 
-  group
-    .command("list")
-    .description("List tagged items")
-    .option("--taggable-id <id>", "Filter by taggable ID")
-    .option("--taggable-type <type>", "Filter by taggable type")
-    .action(
-      withErrorHandling(async (opts, cmd) => {
-        const globalOpts = cmd.optsWithGlobals();
-        const client = createClient(globalOpts.baseUrl);
-        const params: Record<string, any> = {};
-        if (opts.taggableId) params.taggable_id = opts.taggableId;
-        if (opts.taggableType) params.taggable_type = opts.taggableType;
-        const data = await client.get("/api/v2/tagged_items", params);
-        output(data, globalOpts);
-      }),
-    );
+  addFilterOptions(
+    group
+      .command("list")
+      .description("List tagged items")
+      .option("--taggable-id <id>", "Filter by taggable ID")
+      .option("--taggable-type <type>", "Filter by taggable type"),
+    [],
+  ).action(
+    withErrorHandling(async (opts, cmd) => {
+      const globalOpts = cmd.optsWithGlobals();
+      const client = createClient(globalOpts.baseUrl);
+      const params: Record<string, any> = {
+        ...filterParams(opts, []),
+      };
+      if (opts.taggableId) params.taggable_id = opts.taggableId;
+      if (opts.taggableType) params.taggable_type = opts.taggableType;
+      const data = await client.get("/api/v2/tagged_items", params);
+      output(data, globalOpts);
+    }),
+  );
 
   group
     .command("get <id>")

@@ -4,27 +4,32 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addSortOption, sortParams, addFilterOptions, filterParams } from "../filters.js";
 
 export function registerFinanceItemsCommands(program: Command): void {
   const group = program
     .command("finance-items")
     .description("Manage finance items");
 
-  addPaginationOptions(
-    group
-      .command("list")
-      .description("List finance items")
-      .requiredOption("--event <id>", "Event ID")
-      .option("--sort <sort>", "Sort order"),
+  addSortOption(
+    addFilterOptions(
+      addPaginationOptions(
+        group
+          .command("list")
+          .description("List finance items")
+          .requiredOption("--event <id>", "Event ID"),
+      ),
+      [],
+    ),
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params: Record<string, any> = {
+      const data = await client.get(`/api/v2/confirms/${opts.event}/finance_items`, {
         ...paginationParams(opts),
-      };
-      if (opts.sort) params.sort = opts.sort;
-      const data = await client.get(`/api/v2/confirms/${opts.event}/finance_items`, params);
+        ...filterParams(opts, []),
+        ...sortParams(opts),
+      });
       output(data, globalOpts);
     }),
   );

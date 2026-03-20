@@ -3,26 +3,31 @@ import { createClient } from "../client.js";
 import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addFilterOptions, filterParams } from "../filters.js";
 
 export function registerTagsCommands(program: Command): void {
   const group = program
     .command("tags")
     .description("Manage tags");
 
-  group
-    .command("list")
-    .description("List tags")
-    .option("--scope <scope>", "Filter by scope")
-    .action(
-      withErrorHandling(async (opts, cmd) => {
-        const globalOpts = cmd.optsWithGlobals();
-        const client = createClient(globalOpts.baseUrl);
-        const params: Record<string, any> = {};
-        if (opts.scope) params.scope = opts.scope;
-        const data = await client.get("/api/v2/tags", params);
-        output(data, globalOpts);
-      }),
-    );
+  addFilterOptions(
+    group
+      .command("list")
+      .description("List tags")
+      .option("--scope <scope>", "Filter by scope"),
+    [],
+  ).action(
+    withErrorHandling(async (opts, cmd) => {
+      const globalOpts = cmd.optsWithGlobals();
+      const client = createClient(globalOpts.baseUrl);
+      const params: Record<string, any> = {
+        ...filterParams(opts, []),
+      };
+      if (opts.scope) params.scope = opts.scope;
+      const data = await client.get("/api/v2/tags", params);
+      output(data, globalOpts);
+    }),
+  );
 
   group
     .command("get <id>")

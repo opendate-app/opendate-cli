@@ -4,25 +4,34 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+
+const ORDER_FILTERS: FilterDef[] = [
+  { flag: "--search <query>", description: "Search by name or email", ransackKey: "first_name_or_last_name_or_email_cont" },
+];
 
 export function registerOrdersCommands(program: Command): void {
   const orders = program.command("orders").description("Manage orders");
 
-  addPaginationOptions(
-    orders
-      .command("list")
-      .description("List orders for an event")
-      .requiredOption("--event <id>", "Event ID")
-      .option("--sort <sort>", "Sort order"),
+  addSortOption(
+    addFilterOptions(
+      addPaginationOptions(
+        orders
+          .command("list")
+          .description("List orders for an event")
+          .requiredOption("--event <id>", "Event ID"),
+      ),
+      ORDER_FILTERS,
+    ),
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params: Record<string, any> = {
+      const data = await client.get(`/api/v2/confirms/${opts.event}/orders`, {
         ...paginationParams(opts),
-      };
-      if (opts.sort) params.sort = opts.sort;
-      const data = await client.get(`/api/v2/confirms/${opts.event}/orders`, params);
+        ...filterParams(opts, ORDER_FILTERS),
+        ...sortParams(opts),
+      });
       output(data, globalOpts);
     }),
   );

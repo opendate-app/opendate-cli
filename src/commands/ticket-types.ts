@@ -4,27 +4,34 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+
+const TICKET_TYPE_FILTERS: FilterDef[] = [
+  { flag: "--search <query>", description: "Search ticket types by name", ransackKey: "name_cont" },
+];
 
 export function registerTicketTypesCommands(program: Command): void {
   const ticketTypes = program.command("ticket-types").description("Manage ticket types");
 
-  addPaginationOptions(
-    ticketTypes
-      .command("list")
-      .description("List ticket types for an event")
-      .requiredOption("--event <id>", "Event ID")
-      .option("--search <query>", "Search ticket types")
-      .option("--sort <sort>", "Sort order"),
+  addSortOption(
+    addFilterOptions(
+      addPaginationOptions(
+        ticketTypes
+          .command("list")
+          .description("List ticket types for an event")
+          .requiredOption("--event <id>", "Event ID"),
+      ),
+      TICKET_TYPE_FILTERS,
+    ),
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params: Record<string, any> = {
+      const data = await client.get(`/api/v2/confirms/${opts.event}/ticket_types`, {
         ...paginationParams(opts),
-      };
-      if (opts.search) params.search = opts.search;
-      if (opts.sort) params.sort = opts.sort;
-      const data = await client.get(`/api/v2/confirms/${opts.event}/ticket_types`, params);
+        ...filterParams(opts, TICKET_TYPE_FILTERS),
+        ...sortParams(opts),
+      });
       output(data, globalOpts);
     }),
   );

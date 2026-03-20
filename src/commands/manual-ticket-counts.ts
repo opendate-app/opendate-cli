@@ -4,28 +4,33 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+
+const MTC_FILTERS: FilterDef[] = [
+  { flag: "--event-id <id>", description: "Filter by event ID", ransackKey: "calendar_event_id_eq" },
+];
 
 export function registerManualTicketCountsCommands(program: Command): void {
   const group = program
     .command("manual-ticket-counts")
     .description("Manage manual ticket counts");
 
-  addPaginationOptions(
-    group
-      .command("list")
-      .description("List manual ticket counts")
-      .option("--event-id <id>", "Filter by event ID")
-      .option("--sort <sort>", "Sort order"),
+  addSortOption(
+    addFilterOptions(
+      addPaginationOptions(
+        group.command("list").description("List manual ticket counts"),
+      ),
+      MTC_FILTERS,
+    ),
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params: Record<string, any> = {
+      const data = await client.get("/api/v2/manual_ticket_counts", {
         ...paginationParams(opts),
-      };
-      if (opts.eventId) params.event_id = opts.eventId;
-      if (opts.sort) params.sort = opts.sort;
-      const data = await client.get("/api/v2/manual_ticket_counts", params);
+        ...filterParams(opts, MTC_FILTERS),
+        ...sortParams(opts),
+      });
       output(data, globalOpts);
     }),
   );

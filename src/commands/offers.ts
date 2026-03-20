@@ -4,26 +4,29 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addSortOption, sortParams, addFilterOptions, filterParams } from "../filters.js";
 
 export function registerOffersCommands(program: Command): void {
   const group = program
     .command("offers")
     .description("Manage offers");
 
-  addPaginationOptions(
-    group
-      .command("list")
-      .description("List offers")
-      .option("--sort <sort>", "Sort order"),
+  addSortOption(
+    addFilterOptions(
+      addPaginationOptions(
+        group.command("list").description("List offers"),
+      ),
+      [],
+    ),
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params: Record<string, any> = {
+      const data = await client.get("/api/v2/offers", {
         ...paginationParams(opts),
-      };
-      if (opts.sort) params.sort = opts.sort;
-      const data = await client.get("/api/v2/offers", params);
+        ...filterParams(opts, []),
+        ...sortParams(opts),
+      });
       output(data, globalOpts);
     }),
   );
