@@ -12,7 +12,12 @@
     "test": "vitest",
     "lint": "eslint src/"
   },
-  "keywords": ["opendate", "cli", "events", "ticketing"],
+  "keywords": [
+    "opendate",
+    "cli",
+    "events",
+    "ticketing"
+  ],
   "license": "MIT",
   "engines": {
     "node": ">=18"
@@ -26,6 +31,7 @@
     "ora": "^8.1.0"
   },
   "devDependencies": {
+    "@types/inquirer": "^9.0.9",
     "@types/node": "^20.14.0",
     "tsx": "^4.16.0",
     "typescript": "^5.5.0",
