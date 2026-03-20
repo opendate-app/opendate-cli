@@ -45,11 +45,13 @@ export class ApiClient {
 
   private async refreshToken(): Promise<boolean> {
     try {
-      const response = await this.axios.post("/oauth/token", {
-        grant_type: "refresh_token",
-        refresh_token: this.config.refreshToken,
-        client_id: this.config.clientId,
-        client_secret: this.config.clientSecret,
+      const params = new URLSearchParams();
+      params.append("grant_type", "refresh_token");
+      params.append("refresh_token", this.config.refreshToken!);
+      if (this.config.clientId) params.append("client_id", this.config.clientId);
+      if (this.config.clientSecret) params.append("client_secret", this.config.clientSecret);
+      const response = await this.axios.post("/oauth/token", params, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
 
       const { access_token, refresh_token, expires_in } = response.data;
@@ -83,6 +85,14 @@ export class ApiClient {
 
   async post<T = any>(path: string, data?: any): Promise<T> {
     const response = await this.axios.post<T>(path, data);
+    return response.data;
+  }
+
+  async postForm<T = any>(path: string, data: Record<string, string>): Promise<T> {
+    const params = new URLSearchParams(data);
+    const response = await this.axios.post<T>(path, params, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    });
     return response.data;
   }
 
