@@ -18,6 +18,7 @@ export function registerOffersCommands(program: Command): void {
       ),
       [],
     ),
+    "Offers",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

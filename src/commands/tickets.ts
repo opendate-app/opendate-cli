@@ -26,6 +26,7 @@ export function registerTicketsCommands(program: Command): void {
       ),
       TICKET_FILTERS,
     ),
+    "Tickets",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

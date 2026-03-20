@@ -1,5 +1,6 @@
 import type { Command } from "commander";
 import chalk from "chalk";
+import { findResource, RANSACK_PREDICATES, type ResourceDef } from "./resource-registry.js";
 
 export interface FilterDef {
   flag: string;
@@ -9,8 +10,44 @@ export interface FilterDef {
   isBoolean?: boolean;
 }
 
-export function addSortOption(cmd: Command): Command {
-  return cmd.option("--sort <sort>", 'Sort order (e.g. "created_at desc")');
+export function addSortOption(cmd: Command, resourceName?: string): Command {
+  cmd.option("--sort <sort>", 'Sort order (e.g. "created_at desc")');
+
+  if (resourceName) {
+    const res = findResource(resourceName);
+    if (res) {
+      cmd.addHelpText("after", buildFieldHelpText(res));
+    }
+  }
+
+  return cmd;
+}
+
+function buildFieldHelpText(res: ResourceDef): string {
+  const lines: string[] = ["", "Filterable fields (use with --filter or --query):"];
+
+  const maxName = Math.max(...res.fields.map((f) => f.name.length));
+  const maxType = Math.max(...res.fields.map((f) => f.type.length));
+  for (const f of res.fields) {
+    lines.push(
+      `  ${f.name.padEnd(maxName + 2)} ${f.type.padEnd(maxType + 2)} ${f.description}`,
+    );
+  }
+
+  if (res.scopes.length > 0) {
+    lines.push("");
+    lines.push("Available scopes (use as --filter \"scope_name=1\"):");
+    const maxScope = Math.max(...res.scopes.map((s) => s.name.length));
+    for (const s of res.scopes) {
+      lines.push(`  ${s.name.padEnd(maxScope + 2)} ${s.description}`);
+    }
+  }
+
+  lines.push("");
+  lines.push('Run "opdt docs --predicates" for the full list of filter predicates (_eq, _cont, _gt, etc.).');
+  lines.push(`Run "opdt docs ${res.name.toLowerCase()}" for detailed examples.`);
+
+  return lines.join("\n");
 }
 
 export function sortParams(opts: any): Record<string, string> {

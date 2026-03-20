@@ -22,6 +22,7 @@ export function registerManualTicketCountsCommands(program: Command): void {
       ),
       MTC_FILTERS,
     ),
+    "Manual Ticket Counts",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

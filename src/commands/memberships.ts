@@ -21,6 +21,7 @@ export function registerMembershipsCommands(program: Command): void {
       ),
       MEMBERSHIP_FILTERS,
     ),
+    "Memberships",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

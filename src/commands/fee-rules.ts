@@ -17,6 +17,7 @@ export function registerFeeRulesCommands(program: Command): void {
       ),
       [],
     ),
+    "Fee Rules",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

@@ -23,6 +23,7 @@ export function registerOrdersCommands(program: Command): void {
       ),
       ORDER_FILTERS,
     ),
+    "Orders",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

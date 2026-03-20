@@ -21,6 +21,7 @@ export function registerRoomsCommands(program: Command): void {
       ),
       ROOM_FILTERS,
     ),
+    "Rooms",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

@@ -22,6 +22,7 @@ export function registerFansCommands(program: Command): void {
       ),
       FAN_FILTERS,
     ),
+    "Fans",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

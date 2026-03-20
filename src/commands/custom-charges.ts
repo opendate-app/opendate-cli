@@ -19,6 +19,7 @@ export function registerCustomChargesCommands(program: Command): void {
       ),
       [],
     ),
+    "Custom Charges",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

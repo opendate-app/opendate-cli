@@ -21,6 +21,7 @@ export function registerShowActivitiesCommands(program: Command): void {
       ),
       [],
     ),
+    "Show Activities",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

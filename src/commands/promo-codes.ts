@@ -19,6 +19,7 @@ export function registerPromoCodesCommands(program: Command): void {
       ),
       [],
     ),
+    "Promo Codes",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

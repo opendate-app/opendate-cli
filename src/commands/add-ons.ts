@@ -19,6 +19,7 @@ export function registerAddOnsCommands(program: Command): void {
       ),
       [],
     ),
+    "Add-Ons",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();

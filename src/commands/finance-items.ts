@@ -21,6 +21,7 @@ export function registerFinanceItemsCommands(program: Command): void {
       ),
       [],
     ),
+    "Finance Items",
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
