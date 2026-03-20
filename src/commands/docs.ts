@@ -11,7 +11,7 @@ export function registerDocsCommands(program: Command): void {
   program
     .command("docs [resource]")
     .description(
-      "Show filterable fields and query reference (e.g. opdt docs tickets)",
+      "Show filterable fields and query reference (e.g. opendate docs tickets)",
     )
     .option("--predicates", "Show Ransack predicate reference only")
     .option("--list", "List all available resources")
@@ -30,7 +30,7 @@ export function registerDocsCommands(program: Command): void {
         const res = findResource(resource);
         if (!res) {
           console.error(
-            chalk.red(`Unknown resource: "${resource}". Run "opdt docs --list" to see available resources.`),
+            chalk.red(`Unknown resource: "${resource}". Run "opendate docs --list" to see available resources.`),
           );
           process.exit(1);
         }
@@ -47,10 +47,10 @@ function printResourceList(): void {
     console.log(`  ${chalk.cyan(r.name.padEnd(22))} ${r.command}`);
   }
   console.log(
-    `\nRun ${chalk.cyan("opdt docs <resource>")} for field details.`,
+    `\nRun ${chalk.cyan("opendate docs <resource>")} for field details.`,
   );
   console.log(
-    `Run ${chalk.cyan("opdt docs --predicates")} for Ransack predicate reference.`,
+    `Run ${chalk.cyan("opendate docs --predicates")} for Ransack predicate reference.`,
   );
 }
 
@@ -138,7 +138,7 @@ function printResourceDocs(r: ResourceDef): void {
 }
 
 function printFullDocs(): void {
-  console.log(chalk.bold("opdt — Opendate CLI Filter Reference\n"));
+  console.log(chalk.bold("opendate — Opendate CLI Filter Reference\n"));
   console.log(
     "All list commands support --filter, --query, and --sort for flexible querying.\n",
   );

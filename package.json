@@ -4,11 +4,11 @@
   "description": "Opendate CLI - manage your Opendate account from the command line",
   "type": "module",
   "bin": {
-    "opdt": "./dist/bin/opdt.js"
+    "opendate": "./dist/bin/opendate.js"
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsx bin/opdt.ts",
+    "dev": "tsx bin/opendate.ts",
     "test": "vitest",
     "lint": "eslint src/"
   },

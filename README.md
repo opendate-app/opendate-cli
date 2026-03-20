@@ -1,4 +1,4 @@
-# opdt — Opendate CLI
+# opendate — Opendate CLI
 
 Command line tool for the [Opendate API](https://app.opendate.io/developers). Manage events, tickets, orders, fans, finances, and more from your terminal.
 
@@ -12,7 +12,9 @@ npm run build
 npm link
 ```
 
-This installs `opdt` globally on your machine. You can now run `opdt` from any directory.
+This installs `opendate` globally on your machine. You can now run `opendate` from any directory.
+
+After building, the CLI is available at `./dist/bin/opendate.js`. For development, use `npx tsx bin/opendate.ts` instead.
 
 To update later:
 
@@ -28,51 +30,51 @@ npm run build
 If you use an AI coding assistant (e.g., Claude Code), add the following to your assistant's configuration so it knows how to use the CLI. For Claude Code, add this to `~/.claude/CLAUDE.md`:
 
 ```markdown
-## Opendate CLI (opdt)
+## Opendate CLI (opendate)
 
-The `opdt` CLI tool is installed globally and provides access to the Opendate API. When asked about Opendate data (events, tickets, venues, orders, etc.), use it.
+The `opendate` CLI tool is installed globally and provides access to the Opendate API. When asked about Opendate data (events, tickets, venues, orders, etc.), use it.
 
-- Run `opdt --help` to see all available commands
-- Run `opdt docs` to see the full field/filter reference
-- Run `opdt docs <resource>` to see fields, scopes, and filter examples for a specific resource
-- Run `opdt <resource> <command> --help` for command-specific options
+- Run `opendate --help` to see all available commands
+- Run `opendate docs` to see the full field/filter reference
+- Run `opendate docs <resource>` to see fields, scopes, and filter examples for a specific resource
+- Run `opendate <resource> <command> --help` for command-specific options
 - Supports `--json` flag for machine-readable output
 - Supports Ransack filters via `--query 'q[field_predicate]=value'`
 ```
 
-This enables AI agents to discover and use `opdt` commands autonomously — just ask in natural language (e.g., "show me all events this week") and the agent will build the right command.
+This enables AI agents to discover and use `opendate` commands autonomously - just ask in natural language (e.g., "show me all events this week") and the agent will build the right command.
 
 ## Getting Started
 
 ### 1. Log in
 
 ```bash
-opdt login
+opendate login
 ```
 
-You'll be prompted for your email, password, client ID, and client secret. Your auth token is stored in `~/.opdt/config.json`.
+You'll be prompted for your email, password, client ID, and client secret. Your auth token is stored in `~/.opendate/config.json`.
 
 > **Note:** A client ID and client secret are required to authenticate. If you don't have these credentials, contact our team at [support@opendate.io](mailto:support@opendate.io).
 
 ### 2. Verify your session
 
 ```bash
-opdt whoami
+opendate whoami
 ```
 
 ### 3. Start using it
 
 ```bash
-opdt events list
-opdt events get 123
-opdt artists list
-opdt tickets list --event 456
+opendate events list
+opendate events get 123
+opendate artists list
+opendate tickets list --event 456
 ```
 
 ### 4. Log out
 
 ```bash
-opdt logout
+opendate logout
 ```
 
 ## Environments
@@ -81,26 +83,26 @@ By default, all requests go to `https://app.opendate.io` (production). To switch
 
 ```bash
 # Switch to test (http://opendate.test)
-opdt env set test
+opendate env set test
 
 # Switch back to production
-opdt env set production
+opendate env set production
 
 # Check current environment
-opdt env current
+opendate env current
 ```
 
-Switching environments clears your auth tokens, so you'll need to run `opdt login` again.
+Switching environments clears your auth tokens, so you'll need to run `opendate login` again.
 
 You can also override the base URL for a single command:
 
 ```bash
-opdt events list --base-url http://localhost:3000
+opendate events list --base-url http://localhost:3000
 ```
 
 ## Usage
 
-Commands follow the pattern `opdt <resource> <action> [args] [options]`.
+Commands follow the pattern `opendate <resource> <action> [args] [options]`.
 
 ### Global Options
 
@@ -115,32 +117,32 @@ Commands follow the pattern `opdt <resource> <action> [args] [options]`.
 ### Events
 
 ```bash
-opdt events list                      # List all events
-opdt events list --page 2 --per-page 50  # With pagination
-opdt events get <id>                  # Get event details
-opdt events description <id>          # Get event description (HTML)
-opdt events similars <id>             # Find similar events
-opdt events pnl <id>                  # Profit and loss report
-opdt events toast-summary <id>        # Toast POS summary
-opdt events cash-summary <id>         # Cash transaction summary
-opdt events recommendations           # Event recommendations
+opendate events list                      # List all events
+opendate events list --page 2 --per-page 50  # With pagination
+opendate events get <id>                  # Get event details
+opendate events description <id>          # Get event description (HTML)
+opendate events similars <id>             # Find similar events
+opendate events pnl <id>                  # Profit and loss report
+opendate events toast-summary <id>        # Toast POS summary
+opendate events cash-summary <id>         # Cash transaction summary
+opendate events recommendations           # Event recommendations
 ```
 
 ### Artists
 
 ```bash
-opdt artists list
-opdt artists get <id>
-opdt artists create --data '{"artist": {"name": "Band Name"}}'
+opendate artists list
+opendate artists get <id>
+opendate artists create --data '{"artist": {"name": "Band Name"}}'
 ```
 
 ### Venues & Rooms
 
 ```bash
-opdt venues list
-opdt venues get <id>
-opdt rooms list
-opdt rooms get <id>
+opendate venues list
+opendate venues get <id>
+opendate rooms list
+opendate rooms get <id>
 ```
 
 ### Tickets
@@ -148,177 +150,177 @@ opdt rooms get <id>
 Ticket commands require `--event <id>` to specify which event.
 
 ```bash
-opdt tickets list --event <id>
-opdt tickets get <barcode> --event <id>
-opdt tickets check-in <barcode> --event <id>
-opdt tickets print <barcode> --event <id>
+opendate tickets list --event <id>
+opendate tickets get <barcode> --event <id>
+opendate tickets check-in <barcode> --event <id>
+opendate tickets print <barcode> --event <id>
 ```
 
 ### Ticket Types
 
 ```bash
-opdt ticket-types list --event <id>
-opdt ticket-types get <type-id> --event <id>
+opendate ticket-types list --event <id>
+opendate ticket-types get <type-id> --event <id>
 ```
 
 ### Orders
 
 ```bash
-opdt orders list --event <id>
-opdt orders get <order-id> --event <id>
-opdt orders update <order-id> --event <id> --data '{"order": {"first_name": "Jane"}}'
-opdt orders print <order-id> --event <id>
-opdt orders send-receipt <order-id> --event <id>
-opdt orders check-in <order-id> --event <id>
-opdt orders check-out <order-id> --event <id>
+opendate orders list --event <id>
+opendate orders get <order-id> --event <id>
+opendate orders update <order-id> --event <id> --data '{"order": {"first_name": "Jane"}}'
+opendate orders print <order-id> --event <id>
+opendate orders send-receipt <order-id> --event <id>
+opendate orders check-in <order-id> --event <id>
+opendate orders check-out <order-id> --event <id>
 ```
 
 ### Promo Codes
 
 ```bash
-opdt promo-codes list --event <id>
-opdt promo-codes get <promo-id> --event <id>
-opdt promo-codes lookup --event <id> --code SUMMER2024
+opendate promo-codes list --event <id>
+opendate promo-codes get <promo-id> --event <id>
+opendate promo-codes lookup --event <id> --code SUMMER2024
 ```
 
 ### Add-Ons & Custom Charges
 
 ```bash
-opdt add-ons list --event <id>
-opdt custom-charges list --event <id>
+opendate add-ons list --event <id>
+opendate custom-charges list --event <id>
 ```
 
 ### Organizer Reservations
 
 ```bash
-opdt organizer-reservations build --event <id> --data '...'
-opdt organizer-reservations create --event <id> --data '...'
-opdt organizer-reservations update <token> --event <id> --data '...'
-opdt organizer-reservations cancel <token> --event <id>
-opdt organizer-reservations complete <token> --event <id>
+opendate organizer-reservations build --event <id> --data '...'
+opendate organizer-reservations create --event <id> --data '...'
+opendate organizer-reservations update <token> --event <id> --data '...'
+opendate organizer-reservations cancel <token> --event <id>
+opendate organizer-reservations complete <token> --event <id>
 ```
 
 ### Organizer Orders
 
 ```bash
-opdt organizer-orders build --event <id> --data '...'
-opdt organizer-orders create --event <id> --data '...'
+opendate organizer-orders build --event <id> --data '...'
+opendate organizer-orders create --event <id> --data '...'
 ```
 
 ### Ticket Reservations & Transfers
 
 ```bash
-opdt ticket-reservations list --event <id>
-opdt ticket-reservations get <reservation-id> --event <id>
-opdt ticket-transfers new --order <id>
-opdt ticket-transfers create --order <id> --data '...'
+opendate ticket-reservations list --event <id>
+opendate ticket-reservations get <reservation-id> --event <id>
+opendate ticket-transfers new --order <id>
+opendate ticket-transfers create --order <id> --data '...'
 ```
 
 ### Fans
 
 ```bash
-opdt fans list
-opdt fans get <id>
-opdt fans create --data '{"fan": {"first_name": "Jane", "last_name": "Doe", "email": "jane@example.com"}}'
-opdt fans recommendations --event <id>
-opdt fans update-marketing <id> --venue-id 1 --subscribed true
+opendate fans list
+opendate fans get <id>
+opendate fans create --data '{"fan": {"first_name": "Jane", "last_name": "Doe", "email": "jane@example.com"}}'
+opendate fans recommendations --event <id>
+opendate fans update-marketing <id> --venue-id 1 --subscribed true
 ```
 
 ### Scanning
 
 ```bash
-opdt scan lookup <barcode-or-token>
+opendate scan lookup <barcode-or-token>
 ```
 
 ### Memberships
 
 ```bash
-opdt memberships list
+opendate memberships list
 ```
 
 ### Finance
 
 ```bash
-opdt finance-items list --event <id>
-opdt finance-items get <item-id> --event <id>
-opdt finance-items create --event <id> --data '...'
-opdt finance-items update <item-id> --event <id> --data '...'
+opendate finance-items list --event <id>
+opendate finance-items get <item-id> --event <id>
+opendate finance-items create --event <id> --data '...'
+opendate finance-items update <item-id> --event <id> --data '...'
 
-opdt finance-categories list
-opdt finance-categories create --data '{"finance_category": {"name": "Catering"}}'
-opdt finance-categories update <id> --data '...'
-opdt finance-categories delete <id>
+opendate finance-categories list
+opendate finance-categories create --data '{"finance_category": {"name": "Catering"}}'
+opendate finance-categories update <id> --data '...'
+opendate finance-categories delete <id>
 
-opdt settlements summary --event <id>
+opendate settlements summary --event <id>
 
-opdt refunds list --event <id>
-opdt refunds get <refund-id> --event <id>
+opendate refunds list --event <id>
+opendate refunds get <refund-id> --event <id>
 
-opdt fee-rules list
-opdt fee-rules get <id>
+opendate fee-rules list
+opendate fee-rules get <id>
 ```
 
 ### Offers
 
 ```bash
-opdt offers list
-opdt offers get <id>
-opdt offers create --data '...'
+opendate offers list
+opendate offers get <id>
+opendate offers create --data '...'
 ```
 
 ### Tags
 
 ```bash
-opdt tags list
-opdt tags list --scope events
-opdt tags get <id>
-opdt tags create --data '{"tag": {"name": "VIP", "scope": "events"}}'
-opdt tags update <id> --data '{"tag": {"name": "Premium"}}'
-opdt tags delete <id>
+opendate tags list
+opendate tags list --scope events
+opendate tags get <id>
+opendate tags create --data '{"tag": {"name": "VIP", "scope": "events"}}'
+opendate tags update <id> --data '{"tag": {"name": "Premium"}}'
+opendate tags delete <id>
 
-opdt tagged-items list --taggable-id 1 --taggable-type Event
-opdt tagged-items create --data '...'
-opdt tagged-items delete <id>
+opendate tagged-items list --taggable-id 1 --taggable-type Event
+opendate tagged-items create --data '...'
+opendate tagged-items delete <id>
 
-opdt canonical-tags list
+opendate canonical-tags list
 ```
 
 ### Show Activities
 
 ```bash
-opdt show-activities list --event <id>
-opdt show-activities get <activity-id> --event <id>
-opdt show-activities create-offline-checkin --event <id> --data '...'
+opendate show-activities list --event <id>
+opendate show-activities get <activity-id> --event <id>
+opendate show-activities create-offline-checkin --event <id> --data '...'
 ```
 
 ### Other Resources
 
 ```bash
-opdt notes list
-opdt notes get <id>
+opendate notes list
+opendate notes get <id>
 
-opdt calendar-contacts list
-opdt calendar-contacts get <id>
+opendate calendar-contacts list
+opendate calendar-contacts get <id>
 
-opdt food-and-beverage list
-opdt food-and-beverage create --data '...'
+opendate food-and-beverage list
+opendate food-and-beverage create --data '...'
 
-opdt manual-ticket-counts list
-opdt manual-ticket-counts create --data '...'
-opdt manual-ticket-counts delete <id>
+opendate manual-ticket-counts list
+opendate manual-ticket-counts create --data '...'
+opendate manual-ticket-counts delete <id>
 
-opdt inbound-submissions create --app-id <app-id> --data '...'
+opendate inbound-submissions create --app-id <app-id> --data '...'
 ```
 
 ### Users
 
 ```bash
-opdt users current
-opdt users create --data '...'
-opdt users update <id> --data '...'
-opdt users delete <id>
-opdt users reset-password --email user@example.com
-opdt users resend-confirmation --email user@example.com
+opendate users current
+opendate users create --data '...'
+opendate users update <id> --data '...'
+opendate users delete <id>
+opendate users reset-password --email user@example.com
+opendate users resend-confirmation --email user@example.com
 ```
 
 ## Passing Data
@@ -327,10 +329,10 @@ For commands that create or update resources, pass JSON with `--data` or `--data
 
 ```bash
 # Inline JSON
-opdt artists create --data '{"artist": {"name": "The Headliners"}}'
+opendate artists create --data '{"artist": {"name": "The Headliners"}}'
 
 # From a file
-opdt artists create --data-file ./artist.json
+opendate artists create --data-file ./artist.json
 ```
 
 ## Dry Run
@@ -338,7 +340,7 @@ opdt artists create --data-file ./artist.json
 Preview what a mutating command would send without executing it:
 
 ```bash
-opdt tags create --data '{"tag": {"name": "VIP"}}' --dry-run
+opendate tags create --data '{"tag": {"name": "VIP"}}' --dry-run
 # [DRY RUN] POST /api/v2/tags
 # Body: { "tag": { "name": "VIP" } }
 ```
@@ -348,8 +350,8 @@ opdt tags create --data '{"tag": {"name": "VIP"}}' --dry-run
 Add `--json` to any command to get raw JSON instead of a formatted table:
 
 ```bash
-opdt events list --json
-opdt events get 123 --json
+opendate events list --json
+opendate events get 123 --json
 ```
 
 ## Pagination
@@ -357,7 +359,7 @@ opdt events get 123 --json
 List commands support `--page` and `--per-page` (max 250):
 
 ```bash
-opdt events list --page 3 --per-page 100
+opendate events list --page 3 --per-page 100
 ```
 
 ## Filtering & Sorting
@@ -368,13 +370,13 @@ All list commands support filtering and sorting via the Opendate API's Ransack q
 
 ```bash
 # Convenience flags (most common filters)
-opdt events list --search "jazz" --classification confirmed --sort "start_time asc"
+opendate events list --search "jazz" --classification confirmed --sort "start_time asc"
 
 # Raw Ransack filters (any field + predicate)
-opdt events list --filter "title_cont=jazz" --filter "venue_id_eq=42"
+opendate events list --filter "title_cont=jazz" --filter "venue_id_eq=42"
 
 # Complex queries via JSON
-opdt events list --query '{"start_time_gteq":"2024-01-01","calendar_classification_eq":"confirmed"}'
+opendate events list --query '{"start_time_gteq":"2024-01-01","calendar_classification_eq":"confirmed"}'
 ```
 
 ### Filter Flags
@@ -419,9 +421,9 @@ Combine any field name with a predicate suffix to build a filter. For example, t
 Sort by any field with direction (`asc` or `desc`):
 
 ```bash
-opdt events list --sort "start_time desc"
-opdt fans list --sort "last_name asc"
-opdt orders list --event 123 --sort "total desc"
+opendate events list --sort "start_time desc"
+opendate fans list --sort "last_name asc"
+opendate orders list --event 123 --sort "total desc"
 ```
 
 ---
@@ -430,7 +432,7 @@ opdt orders list --event 123 --sort "total desc"
 
 Complete reference of filterable fields, scopes, and convenience flags for each resource. Use any field with a Ransack predicate via `--filter` or `--query`.
 
-### Events (`opdt events list`)
+### Events (`opendate events list`)
 
 **Convenience flags:**
 
@@ -488,15 +490,15 @@ Complete reference of filterable fields, scopes, and convenience flags for each 
 **Examples:**
 
 ```bash
-opdt events list --classification confirmed --start-after 2024-06-01
-opdt events list --filter "title_cont=jazz" --filter "venue_id_eq=42"
-opdt events list --query '{"start_time_gteq":"2024-01-01","is_public_true":"1"}'
-opdt events list --sort "start_time desc" --per-page 100
+opendate events list --classification confirmed --start-after 2024-06-01
+opendate events list --filter "title_cont=jazz" --filter "venue_id_eq=42"
+opendate events list --query '{"start_time_gteq":"2024-01-01","is_public_true":"1"}'
+opendate events list --sort "start_time desc" --per-page 100
 ```
 
 ---
 
-### Artists (`opdt artists list`)
+### Artists (`opendate artists list`)
 
 **Convenience flags:**
 
@@ -540,14 +542,14 @@ opdt events list --sort "start_time desc" --per-page 100
 **Examples:**
 
 ```bash
-opdt artists list --search "Beatles"
-opdt artists list --filter "on_tour_true=1" --sort "name asc"
-opdt artists list --filter "last_show_date_gteq=2024-01-01"
+opendate artists list --search "Beatles"
+opendate artists list --filter "on_tour_true=1" --sort "name asc"
+opendate artists list --filter "last_show_date_gteq=2024-01-01"
 ```
 
 ---
 
-### Venues (`opdt venues list`)
+### Venues (`opendate venues list`)
 
 **Convenience flags:**
 
@@ -571,13 +573,13 @@ opdt artists list --filter "last_show_date_gteq=2024-01-01"
 **Examples:**
 
 ```bash
-opdt venues list --search "Blue Note"
-opdt venues list --filter "nickname_cont=theater" --sort "nickname asc"
+opendate venues list --search "Blue Note"
+opendate venues list --filter "nickname_cont=theater" --sort "nickname asc"
 ```
 
 ---
 
-### Rooms (`opdt rooms list`)
+### Rooms (`opendate rooms list`)
 
 **Convenience flags:**
 
@@ -602,13 +604,13 @@ opdt venues list --filter "nickname_cont=theater" --sort "nickname asc"
 **Examples:**
 
 ```bash
-opdt rooms list --venue-id 5
-opdt rooms list --filter "capacity_gteq=500" --sort "capacity desc"
+opendate rooms list --venue-id 5
+opendate rooms list --filter "capacity_gteq=500" --sort "capacity desc"
 ```
 
 ---
 
-### Tickets (`opdt tickets list --event <id>`)
+### Tickets (`opendate tickets list --event <id>`)
 
 **Convenience flags:**
 
@@ -665,15 +667,15 @@ opdt rooms list --filter "capacity_gteq=500" --sort "capacity desc"
 **Examples:**
 
 ```bash
-opdt tickets list --event 123 --search "john@example.com"
-opdt tickets list --event 123 --filter "checked_in_at_not_null=1" --sort "checked_in_at desc"
-opdt tickets list --event 123 --filter "paid_true=1" --filter "refunded_at_null=1"
-opdt tickets list --event 123 --include-unpaid --sort "created_at desc"
+opendate tickets list --event 123 --search "john@example.com"
+opendate tickets list --event 123 --filter "checked_in_at_not_null=1" --sort "checked_in_at desc"
+opendate tickets list --event 123 --filter "paid_true=1" --filter "refunded_at_null=1"
+opendate tickets list --event 123 --include-unpaid --sort "created_at desc"
 ```
 
 ---
 
-### Ticket Types (`opdt ticket-types list --event <id>`)
+### Ticket Types (`opendate ticket-types list --event <id>`)
 
 **Convenience flags:**
 
@@ -717,13 +719,13 @@ opdt tickets list --event 123 --include-unpaid --sort "created_at desc"
 **Examples:**
 
 ```bash
-opdt ticket-types list --event 123 --search "VIP"
-opdt ticket-types list --event 123 --filter "free_false=1" --sort "price desc"
+opendate ticket-types list --event 123 --search "VIP"
+opendate ticket-types list --event 123 --filter "free_false=1" --sort "price desc"
 ```
 
 ---
 
-### Orders (`opdt orders list --event <id>`)
+### Orders (`opendate orders list --event <id>`)
 
 **Convenience flags:**
 
@@ -770,14 +772,14 @@ opdt ticket-types list --event 123 --filter "free_false=1" --sort "price desc"
 **Examples:**
 
 ```bash
-opdt orders list --event 123 --search "jane@example.com"
-opdt orders list --event 123 --filter "cash_true=1" --sort "total desc"
-opdt orders list --event 123 --filter "created_at_gteq=2024-06-01"
+opendate orders list --event 123 --search "jane@example.com"
+opendate orders list --event 123 --filter "cash_true=1" --sort "total desc"
+opendate orders list --event 123 --filter "created_at_gteq=2024-06-01"
 ```
 
 ---
 
-### Add-Ons (`opdt add-ons list --event <id>`)
+### Add-Ons (`opendate add-ons list --event <id>`)
 
 **Filterable fields:**
 
@@ -798,7 +800,7 @@ opdt orders list --event 123 --filter "created_at_gteq=2024-06-01"
 
 ---
 
-### Promo Codes (`opdt promo-codes list --event <id>`)
+### Promo Codes (`opendate promo-codes list --event <id>`)
 
 **Filterable fields:**
 
@@ -820,7 +822,7 @@ opdt orders list --event 123 --filter "created_at_gteq=2024-06-01"
 
 ---
 
-### Custom Charges (`opdt custom-charges list --event <id>`)
+### Custom Charges (`opendate custom-charges list --event <id>`)
 
 **Filterable fields:**
 
@@ -842,7 +844,7 @@ opdt orders list --event 123 --filter "created_at_gteq=2024-06-01"
 
 ---
 
-### Fans (`opdt fans list`)
+### Fans (`opendate fans list`)
 
 **Convenience flags:**
 
@@ -884,14 +886,14 @@ opdt orders list --event 123 --filter "created_at_gteq=2024-06-01"
 **Examples:**
 
 ```bash
-opdt fans list --search "jane@example.com"
-opdt fans list --filter "city_eq=Nashville" --sort "lifetime_value desc"
-opdt fans list --filter "calendar_events_count_gteq=5"
+opendate fans list --search "jane@example.com"
+opendate fans list --filter "city_eq=Nashville" --sort "lifetime_value desc"
+opendate fans list --filter "calendar_events_count_gteq=5"
 ```
 
 ---
 
-### Memberships (`opdt memberships list`)
+### Memberships (`opendate memberships list`)
 
 **Convenience flags:**
 
@@ -927,13 +929,13 @@ opdt fans list --filter "calendar_events_count_gteq=5"
 **Examples:**
 
 ```bash
-opdt memberships list --search "john"
-opdt memberships list --filter "status_eq=active" --sort "created_at desc"
+opendate memberships list --search "john"
+opendate memberships list --filter "status_eq=active" --sort "created_at desc"
 ```
 
 ---
 
-### Finance Items (`opdt finance-items list --event <id>`)
+### Finance Items (`opendate finance-items list --event <id>`)
 
 **Filterable fields:**
 
@@ -955,13 +957,13 @@ opdt memberships list --filter "status_eq=active" --sort "created_at desc"
 **Examples:**
 
 ```bash
-opdt finance-items list --event 123 --filter "is_income_true=1" --sort "amount desc"
-opdt finance-items list --event 123 --filter "paid_false=1"
+opendate finance-items list --event 123 --filter "is_income_true=1" --sort "amount desc"
+opendate finance-items list --event 123 --filter "paid_false=1"
 ```
 
 ---
 
-### Finance Categories (`opdt finance-categories list`)
+### Finance Categories (`opendate finance-categories list`)
 
 **Convenience flags:**
 
@@ -979,7 +981,7 @@ opdt finance-items list --event 123 --filter "paid_false=1"
 
 ---
 
-### Refunds (`opdt refunds list --event <id>`)
+### Refunds (`opendate refunds list --event <id>`)
 
 **Filterable fields:**
 
@@ -1002,7 +1004,7 @@ opdt finance-items list --event 123 --filter "paid_false=1"
 
 ---
 
-### Fee Rules (`opdt fee-rules list`)
+### Fee Rules (`opendate fee-rules list`)
 
 **Filterable fields:**
 
@@ -1020,7 +1022,7 @@ opdt finance-items list --event 123 --filter "paid_false=1"
 
 ---
 
-### Offers (`opdt offers list`)
+### Offers (`opendate offers list`)
 
 **Filterable fields:**
 
@@ -1052,20 +1054,20 @@ opdt finance-items list --event 123 --filter "paid_false=1"
 **Examples:**
 
 ```bash
-opdt offers list --filter "state_eq=accepted" --sort "start_date desc"
-opdt offers list --filter "not_expired=1"
+opendate offers list --filter "state_eq=accepted" --sort "start_date desc"
+opendate offers list --filter "not_expired=1"
 ```
 
 ---
 
-### Tags (`opdt tags list`)
+### Tags (`opendate tags list`)
 
 Tags use `--scope` for filtering (not Ransack):
 
 ```bash
-opdt tags list --scope Artist
-opdt tags list --scope Fan
-opdt tags list --scope CalendarEvent
+opendate tags list --scope Artist
+opendate tags list --scope Fan
+opendate tags list --scope CalendarEvent
 ```
 
 **Filterable fields** (via `--filter`/`--query`):
@@ -1078,12 +1080,12 @@ opdt tags list --scope CalendarEvent
 
 ---
 
-### Tagged Items (`opdt tagged-items list`)
+### Tagged Items (`opendate tagged-items list`)
 
 Use `--taggable-id` and `--taggable-type` for filtering:
 
 ```bash
-opdt tagged-items list --taggable-id 123 --taggable-type CalendarEvent
+opendate tagged-items list --taggable-id 123 --taggable-type CalendarEvent
 ```
 
 **Filterable fields:**
@@ -1097,7 +1099,7 @@ opdt tagged-items list --taggable-id 123 --taggable-type CalendarEvent
 
 ---
 
-### Notes (`opdt notes list`)
+### Notes (`opendate notes list`)
 
 **Filterable fields:**
 
@@ -1112,7 +1114,7 @@ opdt tagged-items list --taggable-id 123 --taggable-type CalendarEvent
 
 ---
 
-### Calendar Contacts (`opdt calendar-contacts list`)
+### Calendar Contacts (`opendate calendar-contacts list`)
 
 **Filterable fields:**
 
@@ -1125,7 +1127,7 @@ opdt tagged-items list --taggable-id 123 --taggable-type CalendarEvent
 
 ---
 
-### Food & Beverage (`opdt food-and-beverage list`)
+### Food & Beverage (`opendate food-and-beverage list`)
 
 **Convenience flags:**
 
@@ -1152,7 +1154,7 @@ opdt tagged-items list --taggable-id 123 --taggable-type CalendarEvent
 
 ---
 
-### Manual Ticket Counts (`opdt manual-ticket-counts list`)
+### Manual Ticket Counts (`opendate manual-ticket-counts list`)
 
 **Convenience flags:**
 
@@ -1174,7 +1176,7 @@ opdt tagged-items list --taggable-id 123 --taggable-type CalendarEvent
 
 ---
 
-### Show Activities (`opdt show-activities list --event <id>`)
+### Show Activities (`opendate show-activities list --event <id>`)
 
 **Filterable fields:**
 
@@ -1190,7 +1192,7 @@ opdt tagged-items list --taggable-id 123 --taggable-type CalendarEvent
 
 ---
 
-### Ticket Reservations (`opdt ticket-reservations list --event <id>`)
+### Ticket Reservations (`opendate ticket-reservations list --event <id>`)
 
 **Filterable fields:**
 
@@ -1211,7 +1213,7 @@ opdt tagged-items list --taggable-id 123 --taggable-type CalendarEvent
 
 ---
 
-### Inbound Submissions (`opdt inbound-submissions list`)
+### Inbound Submissions (`opendate inbound-submissions list`)
 
 **Filterable fields:**
 
@@ -1230,13 +1232,15 @@ opdt tagged-items list --taggable-id 123 --taggable-type CalendarEvent
 
 ## Configuration
 
-Auth tokens and environment settings are stored in `~/.opdt/config.json`. This file is created automatically when you run `opdt login`.
+Auth tokens and environment settings are stored in `~/.opendate/config.json`. This file is created automatically when you run `opendate login`.
+
+If you already have a legacy `~/.opdt/config.json`, the CLI copies it forward automatically the first time you run `opendate`.
 
 ## Development
 
 ```bash
 # Run in development (no build required)
-npx tsx bin/opdt.ts events list
+npx tsx bin/opendate.ts events list
 
 # Build
 npm run build

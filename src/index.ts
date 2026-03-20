@@ -41,7 +41,7 @@ export function createProgram(): Command {
   const program = new Command();
 
   program
-    .name("opdt")
+    .name("opendate")
     .description("Opendate CLI — manage your Opendate account from the command line")
     .version("0.1.0")
     .option("--json", "Output in JSON format")
