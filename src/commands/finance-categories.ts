@@ -4,28 +4,33 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+
+const FINANCE_CATEGORY_FILTERS: FilterDef[] = [
+  { flag: "--search <query>", description: "Search by name", ransackKey: "name_cont" },
+];
 
 export function registerFinanceCategoriesCommands(program: Command): void {
   const group = program
     .command("finance-categories")
     .description("Manage finance categories");
 
-  addPaginationOptions(
-    group
-      .command("list")
-      .description("List finance categories")
-      .option("--search <query>", "Search finance categories")
-      .option("--sort <sort>", "Sort order"),
+  addSortOption(
+    addFilterOptions(
+      addPaginationOptions(
+        group.command("list").description("List finance categories"),
+      ),
+      FINANCE_CATEGORY_FILTERS,
+    ),
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params: Record<string, any> = {
+      const data = await client.get("/api/v2/finance_categories", {
         ...paginationParams(opts),
-      };
-      if (opts.search) params.search = opts.search;
-      if (opts.sort) params.sort = opts.sort;
-      const data = await client.get("/api/v2/finance_categories", params);
+        ...filterParams(opts, FINANCE_CATEGORY_FILTERS),
+        ...sortParams(opts),
+      });
       output(data, globalOpts);
     }),
   );

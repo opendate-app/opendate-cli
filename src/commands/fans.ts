@@ -4,28 +4,33 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+
+const FAN_FILTERS: FilterDef[] = [
+  { flag: "--search <query>", description: "Search by name or email", paramKey: "search" },
+];
 
 export function registerFansCommands(program: Command): void {
   const group = program
     .command("fans")
     .description("Manage fans");
 
-  addPaginationOptions(
-    group
-      .command("list")
-      .description("List fans")
-      .option("--search <query>", "Search fans")
-      .option("--sort <sort>", "Sort order"),
+  addSortOption(
+    addFilterOptions(
+      addPaginationOptions(
+        group.command("list").description("List fans"),
+      ),
+      FAN_FILTERS,
+    ),
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params: Record<string, any> = {
+      const data = await client.get("/api/v2/fans", {
         ...paginationParams(opts),
-      };
-      if (opts.search) params.search = opts.search;
-      if (opts.sort) params.sort = opts.sort;
-      const data = await client.get("/api/v2/fans", params);
+        ...filterParams(opts, FAN_FILTERS),
+        ...sortParams(opts),
+      });
       output(data, globalOpts);
     }),
   );

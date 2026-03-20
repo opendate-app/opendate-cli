@@ -4,26 +4,31 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+
+const VENUE_FILTERS: FilterDef[] = [
+  { flag: "--search <query>", description: "Search venues by name", ransackKey: "nickname_cont" },
+];
 
 export function registerVenuesCommands(program: Command): void {
   const venues = program.command("venues").description("Manage venues");
 
-  addPaginationOptions(
-    venues
-      .command("list")
-      .description("List venues")
-      .option("--search <query>", "Search venues")
-      .option("--sort <sort>", "Sort order"),
+  addSortOption(
+    addFilterOptions(
+      addPaginationOptions(
+        venues.command("list").description("List venues"),
+      ),
+      VENUE_FILTERS,
+    ),
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params: Record<string, any> = {
+      const data = await client.get("/api/v2/venue_ownerships", {
         ...paginationParams(opts),
-      };
-      if (opts.search) params.search = opts.search;
-      if (opts.sort) params.sort = opts.sort;
-      const data = await client.get("/api/v2/venue_ownerships", params);
+        ...filterParams(opts, VENUE_FILTERS),
+        ...sortParams(opts),
+      });
       output(data, globalOpts);
     }),
   );

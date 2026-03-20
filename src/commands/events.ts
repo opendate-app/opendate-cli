@@ -4,34 +4,36 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+
+const EVENT_FILTERS: FilterDef[] = [
+  { flag: "--search <query>", description: "Search events by title", paramKey: "search" },
+  { flag: "--venue-id <id>", description: "Filter by venue ID", paramKey: "venue_id" },
+  { flag: "--has-ticket-types", description: "Only events with ticket types", paramKey: "has_ticket_types", isBoolean: true },
+  { flag: "--start-after <date>", description: "Events starting on or after date (YYYY-MM-DD)", ransackKey: "start_time_gteq" },
+  { flag: "--start-before <date>", description: "Events starting on or before date (YYYY-MM-DD)", ransackKey: "start_time_lteq" },
+  { flag: "--classification <value>", description: "Filter by classification (confirmed, past, canceled)", ransackKey: "calendar_classification_eq" },
+];
 
 export function registerEventsCommands(program: Command): void {
   const events = program.command("events").description("Manage events");
 
-  addPaginationOptions(
-    events
-      .command("list")
-      .description("List events")
-      .option("--venue-id <id>", "Filter by venue ID")
-      .option("--search <query>", "Search events")
-      .option("--has-ticket-types", "Filter to events with ticket types")
-      .option("--start-after <date>", "Filter events starting after date")
-      .option("--start-before <date>", "Filter events starting before date")
-      .option("--sort <sort>", "Sort order"),
+  addSortOption(
+    addFilterOptions(
+      addPaginationOptions(
+        events.command("list").description("List events"),
+      ),
+      EVENT_FILTERS,
+    ),
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params: Record<string, any> = {
+      const data = await client.get("/api/v2/confirms", {
         ...paginationParams(opts),
-      };
-      if (opts.venueId) params.venue_id = opts.venueId;
-      if (opts.search) params.search = opts.search;
-      if (opts.hasTicketTypes) params.has_ticket_types = true;
-      if (opts.startAfter) params.start_after = opts.startAfter;
-      if (opts.startBefore) params.start_before = opts.startBefore;
-      if (opts.sort) params.sort = opts.sort;
-      const data = await client.get("/api/v2/confirms", params);
+        ...filterParams(opts, EVENT_FILTERS),
+        ...sortParams(opts),
+      });
       output(data, globalOpts);
     }),
   );

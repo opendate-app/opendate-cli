@@ -3,26 +3,29 @@ import { createClient } from "../client.js";
 import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
+import { addSortOption, sortParams, addFilterOptions, filterParams } from "../filters.js";
 
 export function registerCalendarContactsCommands(program: Command): void {
   const group = program
     .command("calendar-contacts")
     .description("View calendar event contacts");
 
-  addPaginationOptions(
-    group
-      .command("list")
-      .description("List calendar event contacts")
-      .option("--sort <sort>", "Sort order"),
+  addSortOption(
+    addFilterOptions(
+      addPaginationOptions(
+        group.command("list").description("List calendar event contacts"),
+      ),
+      [],
+    ),
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params: Record<string, any> = {
+      const data = await client.get("/api/v2/calendar_event_contacts", {
         ...paginationParams(opts),
-      };
-      if (opts.sort) params.sort = opts.sort;
-      const data = await client.get("/api/v2/calendar_event_contacts", params);
+        ...filterParams(opts, []),
+        ...sortParams(opts),
+      });
       output(data, globalOpts);
     }),
   );

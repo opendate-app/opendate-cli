@@ -4,28 +4,33 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
+import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+
+const FNB_FILTERS: FilterDef[] = [
+  { flag: "--event-id <id>", description: "Filter by event ID", ransackKey: "calendar_event_id_eq" },
+];
 
 export function registerFoodAndBeverageCommands(program: Command): void {
   const group = program
     .command("food-and-beverage")
     .description("Manage food and beverage items");
 
-  addPaginationOptions(
-    group
-      .command("list")
-      .description("List food and beverage items")
-      .option("--event-id <id>", "Filter by event ID")
-      .option("--sort <sort>", "Sort order"),
+  addSortOption(
+    addFilterOptions(
+      addPaginationOptions(
+        group.command("list").description("List food and beverage items"),
+      ),
+      FNB_FILTERS,
+    ),
   ).action(
     withErrorHandling(async (opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params: Record<string, any> = {
+      const data = await client.get("/api/v2/food_and_beverage_items", {
         ...paginationParams(opts),
-      };
-      if (opts.eventId) params.event_id = opts.eventId;
-      if (opts.sort) params.sort = opts.sort;
-      const data = await client.get("/api/v2/food_and_beverage_items", params);
+        ...filterParams(opts, FNB_FILTERS),
+        ...sortParams(opts),
+      });
       output(data, globalOpts);
     }),
   );
