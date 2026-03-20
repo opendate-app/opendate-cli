@@ -1,8 +1,4 @@
-import { createRequire } from "node:module";
-
-// inquirer is CJS-compatible via createRequire
-const require = createRequire(import.meta.url);
-const inquirer = require("inquirer");
+import inquirer from "inquirer";
 
 export async function promptCredentials(): Promise<{
   email: string;
