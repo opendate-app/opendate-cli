@@ -50,7 +50,9 @@ This enables AI agents to discover and use `opdt` commands autonomously — just
 opdt login
 ```
 
-You'll be prompted for your email and password. Your auth token is stored in `~/.opdt/config.json`.
+You'll be prompted for your email, password, client ID, and client secret. Your auth token is stored in `~/.opdt/config.json`.
+
+> **Note:** A client ID and client secret are required to authenticate. If you don't have these credentials, contact our team at [support@opendate.io](mailto:support@opendate.io).
 
 ### 2. Verify your session
 
