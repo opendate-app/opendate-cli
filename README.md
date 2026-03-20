@@ -4,8 +4,8 @@ Command line tool for the [Opendate API](https://app.opendate.io/developers). Ma
 
 This CLI covers two APIs:
 
-- **V2 API** — General-purpose API for organizers and admins. Manage events, tickets, orders, fans, finances, offers, tags, and more. Commands use the pattern `opdt <resource> <action>`.
-- **Consumer API** — Fan-facing API designed to power mobile apps. View events, manage tickets, transfer tickets, memberships, and push notifications. Commands use the pattern `opdt consumer <resource> <action>` and require a venue ownership ID.
+- **V2 API** — General-purpose API for organizers and admins. Manage events, tickets, orders, fans, finances, offers, tags, and more. Commands use the pattern `opendate <resource> <action>`.
+- **Consumer API** — Fan-facing API designed to power mobile apps. View events, manage tickets, transfer tickets, memberships, and push notifications. Commands use the pattern `opendate consumer <resource> <action>` and require a venue ownership ID.
 
 ## Installation
 
@@ -1245,13 +1245,13 @@ Consumer commands require a venue ownership ID. Set a default to avoid passing i
 
 ```bash
 # Set default venue
-opdt consumer use-venue 42
+opendate consumer use-venue 42
 
 # Check current venue
-opdt consumer current-venue
+opendate consumer current-venue
 
 # Override for a single command
-opdt consumer confirms list --venue 99
+opendate consumer confirms list --venue 99
 ```
 
 ### Consumer Commands
@@ -1259,84 +1259,84 @@ opdt consumer confirms list --venue 99
 #### Events (Confirms)
 
 ```bash
-opdt consumer confirms list                    # List published events
-opdt consumer confirms get <id>                # Get event details
-opdt consumer confirms upgradeable             # Events with upgradeable add-ons
+opendate consumer confirms list                    # List published events
+opendate consumer confirms get <id>                # Get event details
+opendate consumer confirms upgradeable             # Events with upgradeable add-ons
 ```
 
 #### Tickets
 
 ```bash
-opdt consumer tickets list                     # List your tickets
-opdt consumer tickets get <barcode>            # Get ticket by barcode
-opdt consumer tickets claim <share-code>       # Claim a shared ticket
-opdt consumer tickets pkpass <barcode>         # Download Apple Wallet pass
-opdt consumer tickets pkpass <barcode> --output ./ticket.pkpass
+opendate consumer tickets list                     # List your tickets
+opendate consumer tickets get <barcode>            # Get ticket by barcode
+opendate consumer tickets claim <share-code>       # Claim a shared ticket
+opendate consumer tickets pkpass <barcode>         # Download Apple Wallet pass
+opendate consumer tickets pkpass <barcode> --output ./ticket.pkpass
 ```
 
 #### Ticket Transfers
 
 ```bash
-opdt consumer ticket-transfers list            # List your transfers
-opdt consumer ticket-transfers new <order-id>  # See transferable tickets for an order
-opdt consumer ticket-transfers create --data '{"ticket_transfer": {"first_name": "Jane", "last_name": "Doe", "email": "jane@example.com", "order_id": 123, "ticket_transfer_tickets_attributes": [{"ticket_id": 456}]}}'
+opendate consumer ticket-transfers list            # List your transfers
+opendate consumer ticket-transfers new <order-id>  # See transferable tickets for an order
+opendate consumer ticket-transfers create --data '{"ticket_transfer": {"first_name": "Jane", "last_name": "Doe", "email": "jane@example.com", "order_id": 123, "ticket_transfer_tickets_attributes": [{"ticket_id": 456}]}}'
 ```
 
 #### Memberships
 
 ```bash
-opdt consumer memberships list                 # List your memberships
-opdt consumer memberships get <token>          # Get membership by token
+opendate consumer memberships list                 # List your memberships
+opendate consumer memberships get <token>          # Get membership by token
 ```
 
 #### User Account
 
 ```bash
-opdt consumer users current                    # Get current user
-opdt consumer users create --data '{"user": {"first_name": "Jane", "last_name": "Doe", "email": "jane@example.com", "password": "...", "password_confirmation": "..."}}'
-opdt consumer users register --data '...'      # Complete registration
-opdt consumer users update <id> --data '...'   # Update profile
-opdt consumer users delete <id>                # Delete account
-opdt consumer users reset-password --email jane@example.com
-opdt consumer users resend-confirmation --email jane@example.com
+opendate consumer users current                    # Get current user
+opendate consumer users create --data '{"user": {"first_name": "Jane", "last_name": "Doe", "email": "jane@example.com", "password": "...", "password_confirmation": "..."}}'
+opendate consumer users register --data '...'      # Complete registration
+opendate consumer users update <id> --data '...'   # Update profile
+opendate consumer users delete <id>                # Delete account
+opendate consumer users reset-password --email jane@example.com
+opendate consumer users resend-confirmation --email jane@example.com
 ```
 
 #### Push Notifications
 
 ```bash
-opdt consumer push-notifications list          # List notifications
-opdt consumer push-notifications get <id>      # Get notification details
+opendate consumer push-notifications list          # List notifications
+opendate consumer push-notifications get <id>      # Get notification details
 ```
 
 #### Device Registrations
 
 ```bash
-opdt consumer device-registrations register --token <device-token>
+opendate consumer device-registrations register --token <device-token>
 ```
 
 #### Venue
 
 ```bash
-opdt consumer venue get                        # Get venue details
-opdt consumer venue included                   # List included/child venues
+opendate consumer venue get                        # Get venue details
+opendate consumer venue included                   # List included/child venues
 ```
 
 #### Venue Memberships
 
 ```bash
-opdt consumer venue-memberships get <id>       # Get your venue membership settings
-opdt consumer venue-memberships update <id> --data '{"venue_membership": {"enable_push_notifications": true}}'
+opendate consumer venue-memberships get <id>       # Get your venue membership settings
+opendate consumer venue-memberships update <id> --data '{"venue_membership": {"enable_push_notifications": true}}'
 ```
 
 #### Venue Registrations
 
 ```bash
-opdt consumer venue-registrations create       # Register with the venue
+opendate consumer venue-registrations create       # Register with the venue
 ```
 
 ### Consumer Resource Field Reference
 
-#### Consumer Confirms (`opdt consumer confirms list`)
+#### Consumer Confirms (`opendate consumer confirms list`)
 
 | Field | Type | Description |
 |---|---|---|
@@ -1353,13 +1353,13 @@ opdt consumer venue-registrations create       # Register with the venue
 **Examples:**
 
 ```bash
-opdt consumer confirms list --filter "title_cont=jazz" --sort "start_time asc"
-opdt consumer confirms list --search "Beatles"
+opendate consumer confirms list --filter "title_cont=jazz" --sort "start_time asc"
+opendate consumer confirms list --search "Beatles"
 ```
 
 ---
 
-#### Consumer Tickets (`opdt consumer tickets list`)
+#### Consumer Tickets (`opendate consumer tickets list`)
 
 | Field | Type | Description |
 |---|---|---|
@@ -1384,7 +1384,7 @@ opdt consumer confirms list --search "Beatles"
 
 ---
 
-#### Consumer Memberships (`opdt consumer memberships list`)
+#### Consumer Memberships (`opendate consumer memberships list`)
 
 | Field | Type | Description |
 |---|---|---|
@@ -1402,7 +1402,7 @@ opdt consumer confirms list --search "Beatles"
 
 ---
 
-#### Consumer Push Notifications (`opdt consumer push-notifications list`)
+#### Consumer Push Notifications (`opendate consumer push-notifications list`)
 
 | Field | Type | Description |
 |---|---|---|

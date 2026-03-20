@@ -169,7 +169,7 @@ function printFullDocs(): void {
   console.log(chalk.bold(`\n${"=".repeat(60)}`));
   console.log(chalk.bold("\nConsumer API — Fan-Facing (mobile app)\n"));
   console.log(
-    "Consumer commands require a venue ownership ID. Set with: opdt consumer use-venue <id>\n",
+    "Consumer commands require a venue ownership ID. Set with: opendate consumer use-venue <id>\n",
   );
   for (const r of CONSUMER_RESOURCES) {
     console.log(chalk.bold(`\n${"=".repeat(60)}`));

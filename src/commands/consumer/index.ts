@@ -37,7 +37,7 @@ export function registerConsumerCommands(program: Command): void {
       } else {
         console.log(
           chalk.yellow(
-            'No default venue set. Run "opdt consumer use-venue <id>" to set one.',
+            'No default venue set. Run "opendate consumer use-venue <id>" to set one.',
           ),
         );
       }

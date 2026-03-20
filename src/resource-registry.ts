@@ -577,7 +577,7 @@ export const RESOURCES: ResourceDef[] = [
 export const CONSUMER_RESOURCES: ResourceDef[] = [
   {
     name: "Consumer Confirms",
-    command: "opdt consumer confirms list",
+    command: "opendate consumer confirms list",
     description: "Events from the fan perspective (published, public events)",
     fields: [
       { name: "title", type: "string", description: "Event title" },
@@ -594,7 +594,7 @@ export const CONSUMER_RESOURCES: ResourceDef[] = [
   },
   {
     name: "Consumer Tickets",
-    command: "opdt consumer tickets list",
+    command: "opendate consumer tickets list",
     description: "Fan's purchased tickets",
     fields: [
       { name: "barcode", type: "string", description: "Ticket barcode (identifier)" },
@@ -616,7 +616,7 @@ export const CONSUMER_RESOURCES: ResourceDef[] = [
   },
   {
     name: "Consumer Ticket Transfers",
-    command: "opdt consumer ticket-transfers list",
+    command: "opendate consumer ticket-transfers list",
     description: "Ticket transfers between fans",
     fields: [
       { name: "first_name", type: "string", description: "Recipient first name" },
@@ -630,7 +630,7 @@ export const CONSUMER_RESOURCES: ResourceDef[] = [
   },
   {
     name: "Consumer Memberships",
-    command: "opdt consumer memberships list",
+    command: "opendate consumer memberships list",
     description: "Fan's memberships",
     fields: [
       { name: "token", type: "string", description: "Membership token (identifier)" },
@@ -649,7 +649,7 @@ export const CONSUMER_RESOURCES: ResourceDef[] = [
   },
   {
     name: "Consumer Users",
-    command: "opdt consumer users current",
+    command: "opendate consumer users current",
     description: "Fan user account management",
     fields: [
       { name: "email", type: "string", description: "User email" },
@@ -661,7 +661,7 @@ export const CONSUMER_RESOURCES: ResourceDef[] = [
   },
   {
     name: "Consumer Push Notifications",
-    command: "opdt consumer push-notifications list",
+    command: "opendate consumer push-notifications list",
     description: "Push notifications sent to the fan",
     fields: [
       { name: "message", type: "text", description: "Notification message" },
@@ -672,7 +672,7 @@ export const CONSUMER_RESOURCES: ResourceDef[] = [
   },
   {
     name: "Consumer Venue Ownerships",
-    command: "opdt consumer venue get",
+    command: "opendate consumer venue get",
     description: "Venue/organization info from fan perspective",
     fields: [
       { name: "bio", type: "text", description: "Venue bio" },

@@ -8,7 +8,7 @@ export function resolveVenueOwnershipId(opts: any): string {
   if (config.consumerVenueOwnershipId) return config.consumerVenueOwnershipId;
 
   console.error(
-    'No venue set. Run "opdt consumer use-venue <id>" or pass --venue <id>.',
+    'No venue set. Run "opendate consumer use-venue <id>" or pass --venue <id>.',
   );
   process.exit(1);
 }
