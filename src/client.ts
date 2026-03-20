@@ -101,9 +101,22 @@ export class ApiClient {
     return response.data;
   }
 
+  async patch<T = any>(path: string, data?: any): Promise<T> {
+    const response = await this.axios.patch<T>(path, data);
+    return response.data;
+  }
+
   async delete<T = any>(path: string): Promise<T> {
     const response = await this.axios.delete<T>(path);
     return response.data;
+  }
+
+  async getBinary(path: string, params?: Record<string, any>): Promise<Buffer> {
+    const response = await this.axios.get(path, {
+      params,
+      responseType: "arraybuffer",
+    });
+    return Buffer.from(response.data);
   }
 
   setHeader(key: string, value: string): void {

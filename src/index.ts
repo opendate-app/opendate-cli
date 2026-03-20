@@ -36,6 +36,7 @@ import { registerManualTicketCountsCommands } from "./commands/manual-ticket-cou
 import { registerShowActivitiesCommands } from "./commands/show-activities.js";
 import { registerInboundSubmissionsCommands } from "./commands/inbound-submissions.js";
 import { registerDocsCommands } from "./commands/docs.js";
+import { registerConsumerCommands } from "./commands/consumer/index.js";
 
 export function createProgram(): Command {
   const program = new Command();
@@ -108,6 +109,9 @@ export function createProgram(): Command {
   registerManualTicketCountsCommands(program);
   registerShowActivitiesCommands(program);
   registerInboundSubmissionsCommands(program);
+
+  // Consumer API (fan-facing)
+  registerConsumerCommands(program);
 
   return program;
 }

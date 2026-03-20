@@ -2,6 +2,7 @@ import type { Command } from "commander";
 import chalk from "chalk";
 import {
   RESOURCES,
+  CONSUMER_RESOURCES,
   RANSACK_PREDICATES,
   findResource,
   type ResourceDef,
@@ -42,9 +43,13 @@ export function registerDocsCommands(program: Command): void {
 }
 
 function printResourceList(): void {
-  console.log(chalk.bold("Available resources:\n"));
+  console.log(chalk.bold("V2 API Resources (general-purpose):\n"));
   for (const r of RESOURCES) {
     console.log(`  ${chalk.cyan(r.name.padEnd(22))} ${r.command}`);
+  }
+  console.log(chalk.bold("\nConsumer API Resources (fan-facing):\n"));
+  for (const r of CONSUMER_RESOURCES) {
+    console.log(`  ${chalk.cyan(r.name.padEnd(30))} ${r.command}`);
   }
   console.log(
     `\nRun ${chalk.cyan("opdt docs <resource>")} for field details.`,
@@ -153,9 +158,20 @@ function printFullDocs(): void {
   );
 
   printPredicates();
-  console.log();
 
+  console.log(chalk.bold(`\n${"=".repeat(60)}`));
+  console.log(chalk.bold("\nV2 API — General-Purpose (organizer/admin)\n"));
   for (const r of RESOURCES) {
+    console.log(chalk.bold(`\n${"=".repeat(60)}`));
+    printResourceDocs(r);
+  }
+
+  console.log(chalk.bold(`\n${"=".repeat(60)}`));
+  console.log(chalk.bold("\nConsumer API — Fan-Facing (mobile app)\n"));
+  console.log(
+    "Consumer commands require a venue ownership ID. Set with: opdt consumer use-venue <id>\n",
+  );
+  for (const r of CONSUMER_RESOURCES) {
     console.log(chalk.bold(`\n${"=".repeat(60)}`));
     printResourceDocs(r);
   }
