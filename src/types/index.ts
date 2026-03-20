@@ -11,6 +11,8 @@ export interface OpdtConfig {
   accessToken?: string;
   refreshToken?: string;
   tokenExpiresAt?: number;
+  clientId?: string;
+  clientSecret?: string;
   defaultOutputFormat?: "table" | "json";
 }
 

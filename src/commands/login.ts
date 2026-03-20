@@ -12,19 +12,24 @@ export function registerLoginCommand(program: Command): void {
     .action(
       withErrorHandling(async (_opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
-        const { email, password } = await promptCredentials();
+        const { email, password, clientId, clientSecret } =
+          await promptCredentials();
 
         const client = createUnauthenticatedClient(globalOpts.baseUrl);
         const data = await client.post("/oauth/token", {
           grant_type: "password",
           email,
           password,
+          client_id: clientId,
+          client_secret: clientSecret,
         });
 
         saveConfig({
           accessToken: data.access_token,
           refreshToken: data.refresh_token,
           tokenExpiresAt: Date.now() + data.expires_in * 1000,
+          clientId,
+          clientSecret,
         });
 
         console.log(chalk.green(`Logged in as ${email}`));

@@ -48,6 +48,8 @@ export class ApiClient {
       const response = await this.axios.post("/oauth/token", {
         grant_type: "refresh_token",
         refresh_token: this.config.refreshToken,
+        client_id: this.config.clientId,
+        client_secret: this.config.clientSecret,
       });
 
       const { access_token, refresh_token, expires_in } = response.data;

@@ -3,6 +3,8 @@ import inquirer from "inquirer";
 export async function promptCredentials(): Promise<{
   email: string;
   password: string;
+  clientId: string;
+  clientSecret: string;
 }> {
   const answers = await inquirer.prompt([
     {
@@ -19,6 +21,21 @@ export async function promptCredentials(): Promise<{
       mask: "*",
       validate: (input: string) =>
         input.length > 0 ? true : "Password is required",
+    },
+    {
+      type: "input",
+      name: "clientId",
+      message: "Client ID:",
+      validate: (input: string) =>
+        input.length > 0 ? true : "Client ID is required",
+    },
+    {
+      type: "password",
+      name: "clientSecret",
+      message: "Client Secret:",
+      mask: "*",
+      validate: (input: string) =>
+        input.length > 0 ? true : "Client Secret is required",
     },
   ]);
   return answers;
