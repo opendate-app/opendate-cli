@@ -14,6 +14,7 @@ export interface OpdtConfig {
   clientId?: string;
   clientSecret?: string;
   defaultOutputFormat?: "table" | "json";
+  consumerVenueOwnershipId?: string;
 }
 
 export interface PaginatedResponse<T> {

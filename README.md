@@ -2,6 +2,11 @@
 
 Command line tool for the [Opendate API](https://app.opendate.io/developers). Manage events, tickets, orders, fans, finances, and more from your terminal.
 
+This CLI covers two APIs:
+
+- **V2 API** — General-purpose API for organizers and admins. Manage events, tickets, orders, fans, finances, offers, tags, and more. Commands use the pattern `opdt <resource> <action>`.
+- **Consumer API** — Fan-facing API designed to power mobile apps. View events, manage tickets, transfer tickets, memberships, and push notifications. Commands use the pattern `opdt consumer <resource> <action>` and require a venue ownership ID.
+
 ## Installation
 
 ```bash
@@ -1229,6 +1234,181 @@ opendate tagged-items list --taggable-id 123 --taggable-type CalendarEvent
 | `venue_ownership_id` | integer | Venue ownership ID |
 | `created_at` | datetime | Record created timestamp |
 | `updated_at` | datetime | Record updated timestamp |
+
+## Consumer API (Fan-Facing)
+
+The Consumer API powers Opendate's fan mobile apps. It provides a focused set of functionality: browsing events, managing tickets, transferring tickets, memberships, and push notifications. All consumer endpoints are scoped to a specific venue.
+
+### Setting the Venue
+
+Consumer commands require a venue ownership ID. Set a default to avoid passing it on every command:
+
+```bash
+# Set default venue
+opdt consumer use-venue 42
+
+# Check current venue
+opdt consumer current-venue
+
+# Override for a single command
+opdt consumer confirms list --venue 99
+```
+
+### Consumer Commands
+
+#### Events (Confirms)
+
+```bash
+opdt consumer confirms list                    # List published events
+opdt consumer confirms get <id>                # Get event details
+opdt consumer confirms upgradeable             # Events with upgradeable add-ons
+```
+
+#### Tickets
+
+```bash
+opdt consumer tickets list                     # List your tickets
+opdt consumer tickets get <barcode>            # Get ticket by barcode
+opdt consumer tickets claim <share-code>       # Claim a shared ticket
+opdt consumer tickets pkpass <barcode>         # Download Apple Wallet pass
+opdt consumer tickets pkpass <barcode> --output ./ticket.pkpass
+```
+
+#### Ticket Transfers
+
+```bash
+opdt consumer ticket-transfers list            # List your transfers
+opdt consumer ticket-transfers new <order-id>  # See transferable tickets for an order
+opdt consumer ticket-transfers create --data '{"ticket_transfer": {"first_name": "Jane", "last_name": "Doe", "email": "jane@example.com", "order_id": 123, "ticket_transfer_tickets_attributes": [{"ticket_id": 456}]}}'
+```
+
+#### Memberships
+
+```bash
+opdt consumer memberships list                 # List your memberships
+opdt consumer memberships get <token>          # Get membership by token
+```
+
+#### User Account
+
+```bash
+opdt consumer users current                    # Get current user
+opdt consumer users create --data '{"user": {"first_name": "Jane", "last_name": "Doe", "email": "jane@example.com", "password": "...", "password_confirmation": "..."}}'
+opdt consumer users register --data '...'      # Complete registration
+opdt consumer users update <id> --data '...'   # Update profile
+opdt consumer users delete <id>                # Delete account
+opdt consumer users reset-password --email jane@example.com
+opdt consumer users resend-confirmation --email jane@example.com
+```
+
+#### Push Notifications
+
+```bash
+opdt consumer push-notifications list          # List notifications
+opdt consumer push-notifications get <id>      # Get notification details
+```
+
+#### Device Registrations
+
+```bash
+opdt consumer device-registrations register --token <device-token>
+```
+
+#### Venue
+
+```bash
+opdt consumer venue get                        # Get venue details
+opdt consumer venue included                   # List included/child venues
+```
+
+#### Venue Memberships
+
+```bash
+opdt consumer venue-memberships get <id>       # Get your venue membership settings
+opdt consumer venue-memberships update <id> --data '{"venue_membership": {"enable_push_notifications": true}}'
+```
+
+#### Venue Registrations
+
+```bash
+opdt consumer venue-registrations create       # Register with the venue
+```
+
+### Consumer Resource Field Reference
+
+#### Consumer Confirms (`opdt consumer confirms list`)
+
+| Field | Type | Description |
+|---|---|---|
+| `title` | string | Event title |
+| `start_date` | date | Event start date |
+| `start_time` | datetime | Event start time |
+| `end_date` | date | Event end date |
+| `end_time` | datetime | Event end time |
+| `door_time` | datetime | Door open time |
+| `presenter` | string | Presenter name |
+| `calendar_classification` | string | Event status |
+| `created_at` | datetime | Record created timestamp |
+
+**Examples:**
+
+```bash
+opdt consumer confirms list --filter "title_cont=jazz" --sort "start_time asc"
+opdt consumer confirms list --search "Beatles"
+```
+
+---
+
+#### Consumer Tickets (`opdt consumer tickets list`)
+
+| Field | Type | Description |
+|---|---|---|
+| `barcode` | string | Ticket barcode (identifier) |
+| `first_name` | string | Attendee first name |
+| `last_name` | string | Attendee last name |
+| `email` | string | Attendee email |
+| `product_name` | string | Product/ticket type name |
+| `final_cost` | decimal | Final cost |
+| `face_value` | decimal | Face value |
+| `share_code` | string | Share code for claiming |
+| `seat_assignment` | string | Seat assignment |
+| `delivery_type` | string | Delivery type |
+| `sequence_number` | integer | Sequence number |
+| `created_at` | datetime | Record created timestamp |
+
+**Convenience flags:**
+
+| Flag | Description |
+|---|---|
+| `--include-delayed-delivery` | Include tickets pending delivery |
+
+---
+
+#### Consumer Memberships (`opdt consumer memberships list`)
+
+| Field | Type | Description |
+|---|---|---|
+| `token` | string | Membership token (identifier) |
+| `status` | string | Membership status |
+| `amount_cents` | integer | Amount in cents |
+| `interval` | string | Billing interval |
+| `first_name` | string | Member first name |
+| `last_name` | string | Member last name |
+| `email` | string | Member email |
+| `current_period_start` | datetime | Current period start |
+| `current_period_end` | datetime | Current period end |
+| `canceled_at` | datetime | Cancellation timestamp |
+| `created_at` | datetime | Record created timestamp |
+
+---
+
+#### Consumer Push Notifications (`opdt consumer push-notifications list`)
+
+| Field | Type | Description |
+|---|---|---|
+| `message` | text | Notification message |
+| `subtitle` | string | Notification subtitle |
+| `created_at` | datetime | Record created timestamp |
 
 ## Configuration
 

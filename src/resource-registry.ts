@@ -574,6 +574,114 @@ export const RESOURCES: ResourceDef[] = [
   },
 ];
 
+export const CONSUMER_RESOURCES: ResourceDef[] = [
+  {
+    name: "Consumer Confirms",
+    command: "opdt consumer confirms list",
+    description: "Events from the fan perspective (published, public events)",
+    fields: [
+      { name: "title", type: "string", description: "Event title" },
+      { name: "start_date", type: "date", description: "Event start date" },
+      { name: "start_time", type: "datetime", description: "Event start time" },
+      { name: "end_date", type: "date", description: "Event end date" },
+      { name: "end_time", type: "datetime", description: "Event end time" },
+      { name: "door_time", type: "datetime", description: "Door open time" },
+      { name: "presenter", type: "string", description: "Presenter name" },
+      { name: "calendar_classification", type: "string", description: "Event status" },
+      { name: "created_at", type: "datetime", description: "Record created timestamp" },
+    ],
+    scopes: [],
+  },
+  {
+    name: "Consumer Tickets",
+    command: "opdt consumer tickets list",
+    description: "Fan's purchased tickets",
+    fields: [
+      { name: "barcode", type: "string", description: "Ticket barcode (identifier)" },
+      { name: "first_name", type: "string", description: "Attendee first name" },
+      { name: "last_name", type: "string", description: "Attendee last name" },
+      { name: "email", type: "string", description: "Attendee email" },
+      { name: "product_name", type: "string", description: "Product/ticket type name" },
+      { name: "final_cost", type: "decimal", description: "Final cost" },
+      { name: "face_value", type: "decimal", description: "Face value" },
+      { name: "share_code", type: "string", description: "Share code for claiming" },
+      { name: "seat_assignment", type: "string", description: "Seat assignment" },
+      { name: "seat_type", type: "string", description: "Seat type" },
+      { name: "delivery_type", type: "string", description: "Delivery type" },
+      { name: "delivery_time", type: "datetime", description: "Delivery time" },
+      { name: "sequence_number", type: "integer", description: "Sequence number" },
+      { name: "created_at", type: "datetime", description: "Record created timestamp" },
+    ],
+    scopes: [],
+  },
+  {
+    name: "Consumer Ticket Transfers",
+    command: "opdt consumer ticket-transfers list",
+    description: "Ticket transfers between fans",
+    fields: [
+      { name: "first_name", type: "string", description: "Recipient first name" },
+      { name: "last_name", type: "string", description: "Recipient last name" },
+      { name: "email", type: "string", description: "Recipient email" },
+      { name: "note", type: "text", description: "Transfer note" },
+      { name: "state", type: "string", description: "Transfer state" },
+      { name: "transferred_at", type: "datetime", description: "Transfer timestamp" },
+    ],
+    scopes: [],
+  },
+  {
+    name: "Consumer Memberships",
+    command: "opdt consumer memberships list",
+    description: "Fan's memberships",
+    fields: [
+      { name: "token", type: "string", description: "Membership token (identifier)" },
+      { name: "status", type: "string", description: "Membership status" },
+      { name: "amount_cents", type: "integer", description: "Amount in cents" },
+      { name: "interval", type: "string", description: "Billing interval" },
+      { name: "first_name", type: "string", description: "Member first name" },
+      { name: "last_name", type: "string", description: "Member last name" },
+      { name: "email", type: "string", description: "Member email" },
+      { name: "current_period_start", type: "datetime", description: "Current period start" },
+      { name: "current_period_end", type: "datetime", description: "Current period end" },
+      { name: "canceled_at", type: "datetime", description: "Cancellation timestamp" },
+      { name: "created_at", type: "datetime", description: "Record created timestamp" },
+    ],
+    scopes: [],
+  },
+  {
+    name: "Consumer Users",
+    command: "opdt consumer users current",
+    description: "Fan user account management",
+    fields: [
+      { name: "email", type: "string", description: "User email" },
+      { name: "first_name", type: "string", description: "First name" },
+      { name: "last_name", type: "string", description: "Last name" },
+      { name: "time_zone", type: "string", description: "Time zone" },
+    ],
+    scopes: [],
+  },
+  {
+    name: "Consumer Push Notifications",
+    command: "opdt consumer push-notifications list",
+    description: "Push notifications sent to the fan",
+    fields: [
+      { name: "message", type: "text", description: "Notification message" },
+      { name: "subtitle", type: "string", description: "Notification subtitle" },
+      { name: "created_at", type: "datetime", description: "Record created timestamp" },
+    ],
+    scopes: [],
+  },
+  {
+    name: "Consumer Venue Ownerships",
+    command: "opdt consumer venue get",
+    description: "Venue/organization info from fan perspective",
+    fields: [
+      { name: "bio", type: "text", description: "Venue bio" },
+      { name: "time_zone", type: "string", description: "Venue time zone" },
+    ],
+    scopes: [],
+  },
+];
+
 export const RANSACK_PREDICATES = [
   { suffix: "_eq", description: "Equals", example: 'status_eq=active' },
   { suffix: "_not_eq", description: "Not equals", example: 'status_not_eq=canceled' },
@@ -597,7 +705,8 @@ export const RANSACK_PREDICATES = [
 
 export function findResource(name: string): ResourceDef | undefined {
   const lower = name.toLowerCase().replace(/[-_\s]/g, "");
-  return RESOURCES.find((r) => {
+  const allResources = [...RESOURCES, ...CONSUMER_RESOURCES];
+  return allResources.find((r) => {
     const rLower = r.name.toLowerCase().replace(/[-_\s]/g, "");
     const cmdLower = r.command.toLowerCase().replace(/[-_\s]/g, "");
     return rLower === lower || rLower.startsWith(lower) || cmdLower.includes(lower);
