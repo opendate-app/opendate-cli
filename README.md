@@ -5,11 +5,42 @@ Command line tool for the [Opendate API](https://app.opendate.io/developers). Ma
 ## Installation
 
 ```bash
+git clone https://github.com/opendate/opendate-cli.git
+cd opendate-cli
+npm install
+npm run build
+npm link
+```
+
+This installs `opdt` globally on your machine. You can now run `opdt` from any directory.
+
+To update later:
+
+```bash
+cd opendate-cli
+git pull
 npm install
 npm run build
 ```
 
-After building, the CLI is available at `./dist/bin/opdt.js`. For development, use `npx tsx bin/opdt.ts` instead.
+## AI Agent Setup
+
+If you use an AI coding assistant (e.g., Claude Code), add the following to your assistant's configuration so it knows how to use the CLI. For Claude Code, add this to `~/.claude/CLAUDE.md`:
+
+```markdown
+## Opendate CLI (opdt)
+
+The `opdt` CLI tool is installed globally and provides access to the Opendate API. When asked about Opendate data (events, tickets, venues, orders, etc.), use it.
+
+- Run `opdt --help` to see all available commands
+- Run `opdt docs` to see the full field/filter reference
+- Run `opdt docs <resource>` to see fields, scopes, and filter examples for a specific resource
+- Run `opdt <resource> <command> --help` for command-specific options
+- Supports `--json` flag for machine-readable output
+- Supports Ransack filters via `--query 'q[field_predicate]=value'`
+```
+
+This enables AI agents to discover and use `opdt` commands autonomously — just ask in natural language (e.g., "show me all events this week") and the agent will build the right command.
 
 ## Getting Started
 
