@@ -16,7 +16,7 @@ export function registerLoginCommand(program: Command): void {
           await promptCredentials();
 
         const client = createUnauthenticatedClient(globalOpts.baseUrl);
-        const data = await client.post("/oauth/token", {
+        const data = await client.postForm("/oauth/token", {
           grant_type: "password",
           email,
           password,
