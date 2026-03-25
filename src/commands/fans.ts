@@ -5,6 +5,7 @@ import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 const FAN_FILTERS: FilterDef[] = [
   { flag: "--search <query>", description: "Search by name or email", paramKey: "search" },
@@ -31,6 +32,7 @@ export function registerFansCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, FAN_FILTERS),
         ...sortParams(opts),
+        ...serializerParam("fans"),
       });
       output(data, globalOpts);
     }),
@@ -43,7 +45,7 @@ export function registerFansCommands(program: Command): void {
       withErrorHandling(async (id, _opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/fans/${id}`);
+        const data = await client.get(`/api/v2/fans/${id}`, { ...serializerParam("fans") });
         output(data, globalOpts);
       }),
     );
@@ -76,7 +78,7 @@ export function registerFansCommands(program: Command): void {
       const params: Record<string, any> = {
         ...paginationParams(opts),
       };
-      const data = await client.get(`/api/v2/confirms/${opts.event}/fans/recommendations`, params);
+      const data = await client.get(`/api/v2/confirms/${opts.event}/fans/recommendations`, { ...params, ...serializerParam("fans") });
       output(data, globalOpts);
     }),
   );

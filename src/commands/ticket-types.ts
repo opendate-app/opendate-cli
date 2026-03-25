@@ -5,6 +5,7 @@ import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 const TICKET_TYPE_FILTERS: FilterDef[] = [
   { flag: "--search <query>", description: "Search ticket types by name", ransackKey: "name_cont" },
@@ -32,6 +33,7 @@ export function registerTicketTypesCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, TICKET_TYPE_FILTERS),
         ...sortParams(opts),
+        ...serializerParam("ticket_types"),
       });
       output(data, globalOpts);
     }),
@@ -45,7 +47,7 @@ export function registerTicketTypesCommands(program: Command): void {
       withErrorHandling(async (id, opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/confirms/${opts.event}/ticket_types/${id}`);
+        const data = await client.get(`/api/v2/confirms/${opts.event}/ticket_types/${id}`, { ...serializerParam("ticket_types") });
         output(data, globalOpts);
       }),
     );

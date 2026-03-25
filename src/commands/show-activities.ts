@@ -5,6 +5,7 @@ import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 export function registerShowActivitiesCommands(program: Command): void {
   const group = program
@@ -30,6 +31,7 @@ export function registerShowActivitiesCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, []),
         ...sortParams(opts),
+        ...serializerParam("show_activities"),
       });
       output(data, globalOpts);
     }),
@@ -43,7 +45,7 @@ export function registerShowActivitiesCommands(program: Command): void {
       withErrorHandling(async (id, opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/confirms/${opts.event}/show_activities/${id}`);
+        const data = await client.get(`/api/v2/confirms/${opts.event}/show_activities/${id}`, { ...serializerParam("show_activities") });
         output(data, globalOpts);
       }),
     );

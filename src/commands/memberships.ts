@@ -4,6 +4,7 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 const MEMBERSHIP_FILTERS: FilterDef[] = [
   { flag: "--search <query>", description: "Search by name or email", paramKey: "search" },
@@ -30,6 +31,7 @@ export function registerMembershipsCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, MEMBERSHIP_FILTERS),
         ...sortParams(opts),
+        ...serializerParam("memberships"),
       });
       output(data, globalOpts);
     }),

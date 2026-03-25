@@ -5,6 +5,7 @@ import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 export function registerPromoCodesCommands(program: Command): void {
   const promoCodes = program.command("promo-codes").description("Manage promo codes");
@@ -28,6 +29,7 @@ export function registerPromoCodesCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, []),
         ...sortParams(opts),
+        ...serializerParam("promo_codes"),
       });
       output(data, globalOpts);
     }),
@@ -41,7 +43,7 @@ export function registerPromoCodesCommands(program: Command): void {
       withErrorHandling(async (id, opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/confirms/${opts.event}/promo_codes/${id}`);
+        const data = await client.get(`/api/v2/confirms/${opts.event}/promo_codes/${id}`, { ...serializerParam("promo_codes") });
         output(data, globalOpts);
       }),
     );
@@ -58,7 +60,7 @@ export function registerPromoCodesCommands(program: Command): void {
         const params: Record<string, any> = {
           code: opts.code,
         };
-        const data = await client.get(`/api/v2/confirms/${opts.event}/promo_codes/lookup`, params);
+        const data = await client.get(`/api/v2/confirms/${opts.event}/promo_codes/lookup`, { ...params, ...serializerParam("promo_codes") });
         output(data, globalOpts);
       }),
     );

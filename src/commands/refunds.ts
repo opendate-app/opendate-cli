@@ -4,6 +4,7 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 export function registerRefundsCommands(program: Command): void {
   const group = program
@@ -29,6 +30,7 @@ export function registerRefundsCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, []),
         ...sortParams(opts),
+        ...serializerParam("refunds"),
       });
       output(data, globalOpts);
     }),
@@ -42,7 +44,7 @@ export function registerRefundsCommands(program: Command): void {
       withErrorHandling(async (id, opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/confirms/${opts.event}/refunds/${id}`);
+        const data = await client.get(`/api/v2/confirms/${opts.event}/refunds/${id}`, { ...serializerParam("refunds") });
         output(data, globalOpts);
       }),
     );
