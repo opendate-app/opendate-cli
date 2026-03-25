@@ -5,6 +5,7 @@ import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 const EVENT_FILTERS: FilterDef[] = [
   { flag: "--search <query>", description: "Search events by title", paramKey: "search" },
@@ -34,6 +35,7 @@ export function registerEventsCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, EVENT_FILTERS),
         ...sortParams(opts),
+        ...serializerParam("confirms"),
       });
       output(data, globalOpts);
     }),
@@ -46,7 +48,7 @@ export function registerEventsCommands(program: Command): void {
       withErrorHandling(async (id, _opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/confirms/${id}`);
+        const data = await client.get(`/api/v2/confirms/${id}`, { ...serializerParam("confirms") });
         output(data, globalOpts);
       }),
     );
@@ -71,7 +73,7 @@ export function registerEventsCommands(program: Command): void {
     withErrorHandling(async (id, opts, cmd) => {
       const globalOpts = cmd.optsWithGlobals();
       const client = createClient(globalOpts.baseUrl);
-      const params = { ...paginationParams(opts) };
+      const params = { ...paginationParams(opts), ...serializerParam("confirms") };
       const data = await client.get(`/api/v2/confirms/${id}/similars`, params);
       output(data, globalOpts);
     }),
@@ -131,7 +133,7 @@ export function registerEventsCommands(program: Command): void {
         ...paginationParams(opts),
       };
       if (opts.fanId) params.fan_id = opts.fanId;
-      const data = await client.get("/api/v2/confirms/recommendations", params);
+      const data = await client.get("/api/v2/confirms/recommendations", { ...params, ...serializerParam("confirms") });
       output(data, globalOpts);
     }),
   );

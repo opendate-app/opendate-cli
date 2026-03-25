@@ -5,6 +5,7 @@ import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 const ORDER_FILTERS: FilterDef[] = [
   { flag: "--search <query>", description: "Search by name or email", ransackKey: "first_name_or_last_name_or_email_cont" },
@@ -32,6 +33,7 @@ export function registerOrdersCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, ORDER_FILTERS),
         ...sortParams(opts),
+        ...serializerParam("orders"),
       });
       output(data, globalOpts);
     }),
@@ -45,7 +47,7 @@ export function registerOrdersCommands(program: Command): void {
       withErrorHandling(async (id, opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/confirms/${opts.event}/orders/${id}`);
+        const data = await client.get(`/api/v2/confirms/${opts.event}/orders/${id}`, { ...serializerParam("orders") });
         output(data, globalOpts);
       }),
     );

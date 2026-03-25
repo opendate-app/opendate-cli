@@ -4,6 +4,7 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 export function registerFeeRulesCommands(program: Command): void {
   const group = program
@@ -26,6 +27,7 @@ export function registerFeeRulesCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, []),
         ...sortParams(opts),
+        ...serializerParam("fee_rules"),
       });
       output(data, globalOpts);
     }),
@@ -38,7 +40,7 @@ export function registerFeeRulesCommands(program: Command): void {
       withErrorHandling(async (id, _opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/fee_rules/${id}`);
+        const data = await client.get(`/api/v2/fee_rules/${id}`, { ...serializerParam("fee_rules") });
         output(data, globalOpts);
       }),
     );

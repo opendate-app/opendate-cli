@@ -5,6 +5,7 @@ import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 const FNB_FILTERS: FilterDef[] = [
   { flag: "--event-id <id>", description: "Filter by event ID", ransackKey: "calendar_event_id_eq" },
@@ -31,6 +32,7 @@ export function registerFoodAndBeverageCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, FNB_FILTERS),
         ...sortParams(opts),
+        ...serializerParam("food_and_beverage_items"),
       });
       output(data, globalOpts);
     }),
@@ -43,7 +45,7 @@ export function registerFoodAndBeverageCommands(program: Command): void {
       withErrorHandling(async (id, _opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/food_and_beverage_items/${id}`);
+        const data = await client.get(`/api/v2/food_and_beverage_items/${id}`, { ...serializerParam("food_and_beverage_items") });
         output(data, globalOpts);
       }),
     );

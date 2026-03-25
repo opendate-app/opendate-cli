@@ -4,6 +4,7 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 export function registerNotesCommands(program: Command): void {
   const group = program
@@ -26,6 +27,7 @@ export function registerNotesCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, []),
         ...sortParams(opts),
+        ...serializerParam("notes"),
       });
       output(data, globalOpts);
     }),
@@ -38,7 +40,7 @@ export function registerNotesCommands(program: Command): void {
       withErrorHandling(async (id, _opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/notes/${id}`);
+        const data = await client.get(`/api/v2/notes/${id}`, { ...serializerParam("notes") });
         output(data, globalOpts);
       }),
     );

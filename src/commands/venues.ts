@@ -5,6 +5,7 @@ import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 const VENUE_FILTERS: FilterDef[] = [
   { flag: "--search <query>", description: "Search venues by name", ransackKey: "nickname_cont" },
@@ -29,6 +30,7 @@ export function registerVenuesCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, VENUE_FILTERS),
         ...sortParams(opts),
+        ...serializerParam("venue_ownerships"),
       });
       output(data, globalOpts);
     }),
@@ -41,7 +43,7 @@ export function registerVenuesCommands(program: Command): void {
       withErrorHandling(async (id, _opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/venue_ownerships/${id}`);
+        const data = await client.get(`/api/v2/venue_ownerships/${id}`, { ...serializerParam("venue_ownerships") });
         output(data, globalOpts);
       }),
     );

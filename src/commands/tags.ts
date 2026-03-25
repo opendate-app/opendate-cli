@@ -4,6 +4,7 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addFilterOptions, filterParams } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 export function registerTagsCommands(program: Command): void {
   const group = program
@@ -22,6 +23,7 @@ export function registerTagsCommands(program: Command): void {
       const client = createClient(globalOpts.baseUrl);
       const params: Record<string, any> = {
         ...filterParams(opts, []),
+        ...serializerParam("tags"),
       };
       if (opts.scope) params.scope = opts.scope;
       const data = await client.get("/api/v2/tags", params);
@@ -36,7 +38,7 @@ export function registerTagsCommands(program: Command): void {
       withErrorHandling(async (id, _opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/tags/${id}`);
+        const data = await client.get(`/api/v2/tags/${id}`, { ...serializerParam("tags") });
         output(data, globalOpts);
       }),
     );

@@ -5,6 +5,7 @@ import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 const ROOM_FILTERS: FilterDef[] = [
   { flag: "--search <query>", description: "Search rooms by name", ransackKey: "name_cont" },
@@ -30,6 +31,7 @@ export function registerRoomsCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, ROOM_FILTERS),
         ...sortParams(opts),
+        ...serializerParam("rooms"),
       });
       output(data, globalOpts);
     }),
@@ -42,7 +44,7 @@ export function registerRoomsCommands(program: Command): void {
       withErrorHandling(async (id, _opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/rooms/${id}`);
+        const data = await client.get(`/api/v2/rooms/${id}`, { ...serializerParam("rooms") });
         output(data, globalOpts);
       }),
     );

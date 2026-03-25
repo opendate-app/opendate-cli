@@ -4,6 +4,7 @@ import { output } from "../output.js";
 import { withErrorHandling } from "../errors.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addFilterOptions, filterParams } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 export function registerTaggedItemsCommands(program: Command): void {
   const group = program
@@ -23,6 +24,7 @@ export function registerTaggedItemsCommands(program: Command): void {
       const client = createClient(globalOpts.baseUrl);
       const params: Record<string, any> = {
         ...filterParams(opts, []),
+        ...serializerParam("tagged_items"),
       };
       if (opts.taggableId) params.taggable_id = opts.taggableId;
       if (opts.taggableType) params.taggable_type = opts.taggableType;
@@ -38,7 +40,7 @@ export function registerTaggedItemsCommands(program: Command): void {
       withErrorHandling(async (id, _opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/tagged_items/${id}`);
+        const data = await client.get(`/api/v2/tagged_items/${id}`, { ...serializerParam("tagged_items") });
         output(data, globalOpts);
       }),
     );

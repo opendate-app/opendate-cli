@@ -5,6 +5,7 @@ import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 export function registerAddOnsCommands(program: Command): void {
   const addOns = program.command("add-ons").description("Manage event add-ons");
@@ -28,6 +29,7 @@ export function registerAddOnsCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, []),
         ...sortParams(opts),
+        ...serializerParam("add_ons"),
       });
       output(data, globalOpts);
     }),
@@ -41,7 +43,7 @@ export function registerAddOnsCommands(program: Command): void {
       withErrorHandling(async (id, opts, cmd) => {
         const globalOpts = cmd.optsWithGlobals();
         const client = createClient(globalOpts.baseUrl);
-        const data = await client.get(`/api/v2/confirms/${opts.event}/add_ons/${id}`);
+        const data = await client.get(`/api/v2/confirms/${opts.event}/add_ons/${id}`, { ...serializerParam("add_ons") });
         output(data, globalOpts);
       }),
     );

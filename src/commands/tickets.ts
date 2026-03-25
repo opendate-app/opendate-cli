@@ -5,6 +5,7 @@ import { withErrorHandling } from "../errors.js";
 import { addPaginationOptions, paginationParams } from "../pagination.js";
 import { addMutationOptions, parseMutationData, handleDryRun } from "../mutation.js";
 import { addSortOption, sortParams, addFilterOptions, filterParams, type FilterDef } from "../filters.js";
+import { serializerParam } from "../serializer.js";
 
 const TICKET_FILTERS: FilterDef[] = [
   { flag: "--search <query>", description: "Search by name or email", paramKey: "search" },
@@ -35,6 +36,7 @@ export function registerTicketsCommands(program: Command): void {
         ...paginationParams(opts),
         ...filterParams(opts, TICKET_FILTERS),
         ...sortParams(opts),
+        ...serializerParam("tickets"),
       });
       output(data, globalOpts);
     }),
@@ -51,7 +53,7 @@ export function registerTicketsCommands(program: Command): void {
         const client = createClient(globalOpts.baseUrl);
         const params: Record<string, any> = {};
         if (opts.includeUnpaid) params.include_unpaid = true;
-        const data = await client.get(`/api/v2/confirms/${opts.event}/tickets/${barcode}`, params);
+        const data = await client.get(`/api/v2/confirms/${opts.event}/tickets/${barcode}`, { ...params, ...serializerParam("tickets") });
         output(data, globalOpts);
       }),
     );
